@@ -4,10 +4,8 @@
 
 package frc.robot;
 
-import com.fasterxml.jackson.annotation.OptBoolean;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -19,7 +17,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -28,18 +25,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmCommands.ArmBounce;
 import frc.robot.commands.ArmCommands.ArmLeft;
 import frc.robot.commands.ArmCommands.ArmRight;
 import frc.robot.commands.ArmCommands.ArmSetpoint;
-import frc.robot.commands.ArmCommands.ArmStop;
-import frc.robot.commands.ArmCommands.ArmTest;
 import frc.robot.commands.ElevatorCommands.ElevatorDown;
-import frc.robot.commands.ElevatorCommands.ElevatorLevel2;
-import frc.robot.commands.ElevatorCommands.ElevatorSetpoint;
 import frc.robot.commands.ElevatorCommands.ElevatorUp;
-import frc.robot.commands.GripperCommands.GripperClose;
-import frc.robot.commands.GripperCommands.GripperOpen;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
