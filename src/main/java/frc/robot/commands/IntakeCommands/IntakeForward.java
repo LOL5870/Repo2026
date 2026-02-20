@@ -1,34 +1,31 @@
-// package frc.robot.commands.IntakeCommands;
+package frc.robot.commands.IntakeCommands;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
 
-// public class IntakeForward extends Command{
+public class IntakeForward extends Command{
 
-//     private Intake Intake;
+    private Intake Intake;
 
-//     public IntakeForward(Intake Intake){
+    public IntakeForward(Intake Intake){
 
-//         this.Intake = Intake;
-//         addRequirements(Intake);
+        this.Intake = Intake;
+        addRequirements(Intake);
 
-//     }
+    }
 
-//     public void initialize(){
-//     }
+    public void execute(){
+        Intake.IntakeMotorForwards(5);
 
-//     public void execute(){
-//         Intake.IntakeMotorForwards(5);
+    }
 
-//     }
+    public void end(boolean interrupted){
+        Intake.IntakeStop();
 
-//     public void end(boolean interrupted){
-//         Intake.IntakeStop();
+    }
 
-//     }
+    public boolean isFinished(){
+        return true;
+    }
 
-//     public boolean isFinished(){
-//         return true;
-//     }
-
-// }
+}
