@@ -27,9 +27,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.LimelightHelpers;
+// import frc.robot.commands.IntakeCommands.IntakeBackwards;
+// import frc.robot.commands.IntakeCommands.IntakeForward;
+// import frc.robot.commands.ShooterCommands.Shoot;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
-
 import java.io.File;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -39,12 +44,19 @@ import java.io.File;
 public class RobotContainer
 { 
 
+  // private Shooter shooter = new Shooter();
+  // private Intake intake = new Intake();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   final         CommandXboxController opXbox = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+
+  // private IntakeBackwards intakeBackwards = new IntakeBackwards(intake);
+  // private IntakeForward intakeForward = new IntakeForward(intake);
+  // private Shoot shoot = new Shoot(shooter);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -188,9 +200,13 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }
+    
     driverXbox.start().onTrue(new InstantCommand(() -> drivebase.zeroGyro()));
-  
 
+    // opXbox.rightBumper().whileTrue(intakeForward);
+    // opXbox.leftBumper().whileTrue(intakeBackwards);
+    // opXbox.a().whileTrue(shoot);
+  
     // opXbox.povUp().whileTrue(new ElevatorSetpoint(elevator, 20).alongWith(new ArmSetpoint(arm, 10))).onFalse(new GripperOpen(arm));
 
 // opXbox.povRight().whileTrue(new ElevatorSetpoint(elevator, 50).alongWith(new ArmSetpoint(arm, 30))).onFalse(new GripperClose(arm));
