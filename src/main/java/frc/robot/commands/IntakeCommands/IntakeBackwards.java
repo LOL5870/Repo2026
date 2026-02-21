@@ -5,27 +5,30 @@ import frc.robot.subsystems.Intake;
 
 public class IntakeBackwards extends Command{
 
-        private Intake Intake;
+// private Intake Intake;
 
-    public IntakeBackwards(Intake Intake){
+// public IntakeBackwards(Intake Intake){
 
-        this.Intake = Intake;
-        addRequirements(Intake);
+// this.Intake = Intake;
+// addRequirements(Intake);
 
-    }
+// }
 
-    public void execute(){
-        Intake.IntakeMotorBackwards(5);
-        
-    }
+// public void initialize(){
+// }
 
-    public void end(boolean interrupted){
-        Intake.IntakeStop();
+// public void execute(){
+// Intake.IntakeMotorBackwards(5);
 
-    }
+// }
 
-    public boolean isFinished(){
-        return true;
-    }
-    
-}
+// public void end(boolean interrupted){
+// Intake.IntakeStop();
+
+// }
+
+// public boolean isFinished(){
+// return true;
+// }
+
+// }
