@@ -1,34 +1,34 @@
-// package frc.robot.commands.ShooterCommands;
+package frc.robot.commands.ShooterCommands;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Shooter;
+import java.util.function.Supplier;
 
-// public class Shoot extends Command{
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Shooter;
 
-//         private Shooter Shooter;
+public class Shoot extends Command{
 
-//     public Shoot(Shooter Shooter){
-//         this.Shooter = Shooter;
-//         addRequirements(Shooter);
-//     }
+    private Shooter Shooter;
+    private Supplier<Double> rightTrigger;
 
-//     public void initialize(){
+    public Shoot(Shooter Shooter, Supplier<Double> supplier){
+        this.Shooter = Shooter;
+        addRequirements(Shooter);
+    }
 
-//     }
+    public void execute(){
+        double speed = rightTrigger.get();
+        Shooter.ShooterMotorForwards(speed);
 
-//     public void execute(){
-//         Shooter.ShooterMotorForwards(5);
+    }
 
-//     }
+    public void end(boolean interrupted){
+        Shooter.ShooterStop();
 
-//     public void end(boolean interrupted){
-//         Shooter.ShooterStop();
+    }
 
-//     }
-
-//     public boolean isFinished(){
-//         return true;
-//     }
+    public boolean isFinished(){
+        return true;
+    }
     
-// }
+}

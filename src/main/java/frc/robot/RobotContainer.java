@@ -30,9 +30,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.LimelightHelpers;
 // import frc.robot.commands.IntakeCommands.IntakeBackwards;
 // import frc.robot.commands.IntakeCommands.IntakeForward;
-// import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.ShooterCommands.Shoot;
 // import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import java.io.File;
@@ -44,7 +44,7 @@ import java.io.File;
 public class RobotContainer
 { 
 
-  // private Shooter shooter = new Shooter();
+  private Shooter shooter = new Shooter();
   // private Intake intake = new Intake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -56,7 +56,6 @@ public class RobotContainer
 
   // private IntakeBackwards intakeBackwards = new IntakeBackwards(intake);
   // private IntakeForward intakeForward = new IntakeForward(intake);
-  // private Shoot shoot = new Shoot(shooter);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -205,7 +204,7 @@ public class RobotContainer
 
     // opXbox.rightBumper().whileTrue(intakeForward);
     // opXbox.leftBumper().whileTrue(intakeBackwards);
-    // opXbox.a().whileTrue(shoot);
+    opXbox.axisGreaterThan(1, .1).whileTrue(new Shoot(shooter, () -> opXbox.getRightTriggerAxis()));
   
     // opXbox.povUp().whileTrue(new ElevatorSetpoint(elevator, 20).alongWith(new ArmSetpoint(arm, 10))).onFalse(new GripperOpen(arm));
 
