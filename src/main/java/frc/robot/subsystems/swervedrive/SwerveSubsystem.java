@@ -108,7 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via
                                              // angle.
-    swerveDrive.setCosineCompensator(false);// !SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for
+    swerveDrive.setCosineCompensator(true);// !SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for
                                             // simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,
         true,
@@ -154,11 +154,12 @@ public class SwerveSubsystem extends SubsystemBase {
     assert (modules.length == names.length);
     for (int i = 0; i < modules.length; ++i) {
       SmartDashboard.putNumber(names[i], modules[i].getAbsoluteEncoder().getAbsolutePosition());
+      SmartDashboard.putNumber(names[1], modules[1].getAbsoluteEncoder().getAbsolutePosition());
     }
     SmartDashboard.putNumber("Gyro", swerveDrive.getGyro().getRotation3d().getAngle());
 
     SmartDashboard.putString("Odometry", getPose().toString());
-
+    
   }
 
   @Override
@@ -215,7 +216,7 @@ public class SwerveSubsystem extends SubsystemBase {
               // 0.15
               // 0.067,0.267,0
               // .5
-              new PIDConstants(1, 0, 0),
+              new PIDConstants(1, 0, 0), 
               // .137
               // 0.013, 0, 0.015
               new PIDConstants(0, 0, 0)),

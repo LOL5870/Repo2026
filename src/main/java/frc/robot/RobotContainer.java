@@ -9,6 +9,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.revrobotics.AbsoluteEncoder;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,12 +26,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Align;
 import frc.robot.subsystems.LimelightHelpers;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import java.io.File;
@@ -46,6 +50,7 @@ public class RobotContainer {
 
   // private Intake intake = new Intake();
   // private Shooter shooter = new Shooter();
+  Shooter shooter = new Shooter(); 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
@@ -121,6 +126,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // elevator.setDefaultCommand(new ElevatorStop(elevator));
+    shooter.setDefaultCommand(shooter.stop());
     configureBindings();
 
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -153,6 +159,9 @@ public class RobotContainer {
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngleKeyboard);
 
+        driverXbox.axisGreaterThan(3, .1).whileTrue(shooter.shoot(() -> driverXbox.getRightTriggerAxis())); 
+          driverXbox.axisGreaterThan(2, .1).whileTrue(shooter.shootReverse(() -> driverXbox.getLeftTriggerAxis()));   
+        //driverXbox.a().whileTrue(shooter.Intake()); 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
     } else {
@@ -205,9 +214,11 @@ public class RobotContainer {
 
     driverXbox.start().onTrue(new InstantCommand(() -> drivebase.zeroGyro()));
     driverXbox.a().whileTrue(align);
-    // opXbox.rightBumper().whileTrue(intakeForward);
-    // opXbox.leftBumper().whileTrue(intakeBackwards);
-    // opXbox.a().whileTrue(shoot);
+    opXbox.rightBumper().whileTrue(shooter.IntakeToHopper()).onFalse(shooter.stop());
+    opXbox.leftBumper().whileTrue(shooter.IntakeToShooter()).onFalse(shooter.stop());
+    opXbox.a().whileTrue(shooter.shoot(() -> 0.75)).onFalse(shooter.stop());
+    opXbox.b().whileTrue(shooter.shootReverse(() -> 0.75)).onFalse(shooter.stop());
+    
     // opXbox.a().whileTrue(new InstantCommand(() ->
     // shooter.ShooterMotorForwards(5)));
 
