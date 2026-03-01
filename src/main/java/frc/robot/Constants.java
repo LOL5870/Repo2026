@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -41,5 +43,28 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
+  }
+
+  public static class ShooterIntakeConstants { 
+    // IDS
+    public static final int ShooterIntakeID = 11; 
+    public static final int ShooterID = 10; 
+    public static final int GroundIntakeID = 13;
+    public static final int IndxrID = 12; 
+
+    // MIN SPEEDS
+    public static final double SHOOTER_MIN_SPEED = -1; 
+    public static final double INDXR_MIN_SPEED = -1; 
+    public static final double GROUND_MIN_SPEED = -1; 
+
+    // MAX SPEEDS
+    public static final double SHOOTER_MAX_SPEED = 0.9; 
+    public static final double INDXR_MAX_SPEED = 0.9; 
+    public static final double GROUND_MAX_SPEED = 0.9; 
+
+    // PID
+    public static final PIDConstants shooterPID = new PIDConstants(0.0, 0.0, 0.0); 
+    public static final PIDConstants shooterIntakePID = new PIDConstants(0.0, 0.0, 0.0); 
+    
   }
 }

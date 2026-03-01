@@ -7,14 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import java.io.File;
-
 
 public class RobotContainer {
 
@@ -39,7 +37,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Default Commands
-    shooter.setDefaultCommand(shooter.stop());
+    //
+    //
 
     // Configure Bindings
     configureBindings();
@@ -54,16 +53,13 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
     // Setup Controls
+
     // Driver Controller
-    driverXbox.axisGreaterThan(3, .1).whileTrue(shooter.shoot(() -> driverXbox.getRightTriggerAxis())); 
-    driverXbox.axisGreaterThan(2, .1).whileTrue(shooter.shootReverse(() -> driverXbox.getLeftTriggerAxis())); 
-    driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
+    //driverXbox; 
 
     // Operator Controllers
-    opXbox.rightBumper().whileTrue(shooter.IntakeToHopper()).onFalse(shooter.stop());
-    opXbox.leftBumper().whileTrue(shooter.IntakeToShooter()).onFalse(shooter.stop());
-    opXbox.a().whileTrue(shooter.shoot(() -> 0.75)).onFalse(shooter.stop());
-    opXbox.b().whileTrue(shooter.shootReverse(() -> 0.75)).onFalse(shooter.stop());
+    //opXbox;
+
   }
 
 
