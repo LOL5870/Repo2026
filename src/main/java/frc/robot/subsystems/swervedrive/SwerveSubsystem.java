@@ -6,7 +6,6 @@ package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
 
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -18,8 +17,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,13 +30,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
-import frc.robot.subsystems.LimelightHelpers;
-//import frc.robot.subsystems.Intake;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -50,19 +44,15 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
-
 import org.json.simple.parser.ParseException;
-import org.photonvision.targeting.PhotonPipelineResult;
+
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -176,7 +166,6 @@ public class SwerveSubsystem extends SubsystemBase {
     try {
       config = RobotConfig.fromGUISettings();
 
-      final boolean enableFeedforward = true;
       // Configure AutoBuilder last
       AutoBuilder.configure(
           this::getPose,
@@ -184,47 +173,25 @@ public class SwerveSubsystem extends SubsystemBase {
           this::resetOdometry,
           // Method to reset odometry (will be called if your auto has a starting pose)
           this::getRobotVelocity,
+
           // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speedsRobotRelative, moduleFeedForwards) -> {
-            // x3 uwu nuzzels on you
-            // if (enableFeedforward)
-            if (false) {
-              swerveDrive.drive(
-                  speedsRobotRelative,
-                  swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
-                  moduleFeedForwards.linearForces());
-            } else {
               swerveDrive.setChassisSpeeds(speedsRobotRelative);
-            }
           },
+          
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
           // optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
-              // // PPHolonomicController is the built in path following controller for
-              // holonomic drive trains
-              // new PIDConstants(5.0, 0.0, 0.0),
-              // // Translation PID constants
-              // new PIDConstants(5.0, 0.0, 0.0)
-              // // Rotation PID constants
 
-              /*
-               * Lifted numbers from Team5870-2025 Repo in Constants.java >:3 uwu rawr x3
-               * nuzzles on you
-               */
-              // test .137
-
-              // 0.15
-              // 0.067,0.267,0
-              // .5
               new PIDConstants(1, 0, 0), 
               // .137
               // 0.013, 0, 0.015
               new PIDConstants(0, 0, 0)),
+
           config,
           // The robot configuration
           () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red
-            // alliance
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
             // This will flip the path being followed to the red side of the field.
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 

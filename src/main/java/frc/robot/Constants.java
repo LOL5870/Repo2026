@@ -28,14 +28,6 @@ public final class Constants {
   public static final double MAX_SPEED = Units.feetToMeters(14.5);
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
-  // public static final class AutonConstants
-  // {
-  //
-  // public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0,
-  // 0);
-  // public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
-  // }
-
   public static final class DrivebaseConstants {
 
     // Hold time on motor brakes when disabled
@@ -50,46 +42,4 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
   }
-
-  public static final class DeliveryConstants {
-    public static final int armMotorID = 15;
-
-    public static final int gripperReverseChannel = 7;
-    public static final int pneumaticHubID = 0;
-
-    public static final double grabPosition = 41;
-    public static final double level1Position = 15;
-    public static final double level2Position = 13;
-    public static final double level3Position = 17.5;
-    public static final double level4Position = 18.2;
-    public static final double maxPosition = 0;
-    public static final double minPosition = 0;
-    public static final double restPosition = 0;
-
-    public static final double armP = 0.16;
-    public static final double armI = 0;
-    public static final double armD = 0;
-  }
-
-  public static final class ElevatorConstants {
-    public static final int leaderMotorID = 13;
-    public static final int followerMotorID = 10;
-
-    // new needed values for pole coral 95.64620208740234
-    public static final double grabPosition = 106.76497650146484;
-    public static final double level1Position = 5.9618;
-    public static final double level2Position = 0;
-    public static final double level3Position = 0;
-    public static final double level4Position = 137;
-    public static final double restPosition = 97.76497650146484;// 102.97858428955078 - original encoder value;
-
-    public static final double elevatorP = 0.08;
-    public static final double elevatorI = 0;
-    public static final double elevatorD = 0;
-  }
-
-  public static final class limelightconstants {
-
-  }
-
 }

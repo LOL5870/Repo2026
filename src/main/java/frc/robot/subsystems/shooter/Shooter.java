@@ -1,12 +1,8 @@
-package frc.robot.subsystems;
-
-
+package frc.robot.subsystems.shooter;
 
 import java.util.function.Supplier;
-
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +16,6 @@ public class Shooter extends SubsystemBase{
 
     public Command shoot(Supplier<Double> spd) { 
         return run(() -> {
-            // shooter1.set(Math.abs(spd.get()));
             shooterIntake.set(-.6);
         }); 
     }
@@ -62,5 +57,4 @@ public class Shooter extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("FlyWheel", shooterIntake.get());
     }
-
 }
