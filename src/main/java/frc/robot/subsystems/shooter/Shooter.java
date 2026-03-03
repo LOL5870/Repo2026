@@ -95,16 +95,72 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.setDefaultNumber("GroundIntake Speed", 0); 
     }
 
-    // Examplar code for testing
+    // printing out the speeds of the motors to elastic
     public Command testShooter(){
         return run(()-> shooter.set(SmartDashboard.getNumber("Shooter Speed", 0)));
     }
 
+    public Command testShooterIntake(){
+        return run(()-> shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0)));
+    }
+
+    public Command testIndxr(){
+        return run(()-> indxr.set(SmartDashboard.getNumber("Indxr speed", 0)));
+    }
+
+    public Command testGroundIntake(){
+        return run(()-> groundIntake.set(SmartDashboard.getNumber("GroundIntake Speed", 0)));
+    }
+
     @Override
     public void periodic() {
+        // groundIntake.set(SmartDashboard.getNumber("GroundIntake Speed", 0));
+        // indxr.set(SmartDashboard.getNumber("Indxr Speed", 0));
+        // shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0));
+        // shooter.set(SmartDashboard.getNumber("Shooter Speed", 0));
+    }
+
+    public Command stopIndxr() { 
+        return runOnce(() -> indxr.set(0));
+    }
+      public Command stopShooterIntake() { 
+        return runOnce(() -> shooterIntake.set(0));
+    }
+      public Command stopGroundIntake() { 
+        return runOnce(() -> groundIntake.set(0));
+    }
+
+    public Command startIntakeCycle(){
+        return run(()->{
+            shooterIntake.set(-0.5);
+            indxr.set(-0.4);
+            groundIntake.set(-0.5);
+        });
 
     }
 
-    
+    public Command shootCycle(){
+        return run(()->{
+            shooterIntake.set(-0.4);
+            indxr.set(0.6);
 
+        });
+    }
+
+    public Command ejectFuel(){
+        return run(() ->{
+            shooterIntake.set(0.5);
+            indxr.set(0.4);
+
+        });
+    }
+
+    public Command stopCycles(){
+        return run(()->{
+            shooterIntake.set(0);
+            indxr.set(0);
+            groundIntake.set(0);
+        });
+
+    }
 }

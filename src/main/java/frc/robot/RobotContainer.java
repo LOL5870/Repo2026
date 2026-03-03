@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -32,7 +33,7 @@ public class RobotContainer {
       () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(driverXbox::getRightX)
       .deadband(OperatorConstants.DEADBAND)
-      .scaleTranslation(0.4)
+      .scaleTranslation(.60)
       .allianceRelativeControl(true);
 
   public RobotContainer() {
@@ -54,11 +55,17 @@ public class RobotContainer {
 
     // Setup Controls
 
+
     // Driver Controller
-    //driverXbox; 
+    driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
+    driverXbox.rightBumper().whileTrue(shooter.testIndxr()).onFalse(shooter.stopIndxr()); 
+    driverXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake()); 
+    driverXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake()); 
+    driverXbox.y().whileTrue(shooter.shootCycle()).onFalse(shooter.stopCycles());
 
     // Operator Controllers
-    //opXbox;
+    opXbox.b().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
+    opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
 
   }
 
