@@ -129,6 +129,9 @@ public class Shooter extends SubsystemBase {
       public Command stopGroundIntake() { 
         return runOnce(() -> groundIntake.set(0));
     }
+          public Command stopShooter() { 
+        return runOnce(() -> shooter.set(0));
+    }
 
     public Command startIntakeCycle(){
         return run(()->{
@@ -141,7 +144,7 @@ public class Shooter extends SubsystemBase {
 
     public Command shootCycle(){
         return run(()->{
-            shooterIntake.set(-0.4);
+            shooterIntake.set(-0.9);
             indxr.set(0.6);
 
         });

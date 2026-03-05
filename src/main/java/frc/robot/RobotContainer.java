@@ -58,7 +58,7 @@ public class RobotContainer {
 
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.rightBumper().whileTrue(shooter.testIndxr()).onFalse(shooter.stopIndxr()); 
+    driverXbox.rightBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter()); 
     driverXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake()); 
     driverXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake()); 
     driverXbox.y().whileTrue(shooter.shootCycle()).onFalse(shooter.stopCycles());
