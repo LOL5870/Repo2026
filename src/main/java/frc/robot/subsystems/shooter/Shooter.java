@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -82,6 +83,16 @@ public class Shooter extends SubsystemBase {
         //.pid(ShooterIntakeConstants.shooterIntakePID.kP, ShooterIntakeConstants.shooterIntakePID.kI, ShooterIntakeConstants.shooterIntakePID.kD)
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
+        shooterConfig.closedLoop.maxMotion
+        // Set MAXMotion parameters for position control. We don't need to pass
+        // a closed loop slot, as it will default to slot 0.
+        .cruiseVelocity(1000)
+        .maxAcceleration(1000)
+        .allowedProfileError(1)
+        // Set MAXMotion parameters for velocity control in slot 1
+        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
+        .cruiseVelocity(6000, ClosedLoopSlot.kSlot1)
+        .allowedProfileError(1, ClosedLoopSlot.kSlot1);
         // Apply the configurations
         shooter.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         shooterIntake.configure(shooterIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -91,7 +102,7 @@ public class Shooter extends SubsystemBase {
         // Initialzing the widgets
         SmartDashboard.setDefaultNumber("Shooter Speed", 0);
         SmartDashboard.setDefaultNumber("ShooterIntake Speed", 0);
-        SmartDashboard.setDefaultNumber("Indxr speed", 0);
+        SmartDashboard.setDefaultNumber("Indxr speed", -0.4);
         SmartDashboard.setDefaultNumber("GroundIntake Speed", 0); 
     }
 
@@ -105,7 +116,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command testIndxr(){
-        return run(()-> indxr.set(SmartDashboard.getNumber("Indxr speed", 0)));
+        return run(()-> indxr.set(SmartDashboard.getNumber("Indxr speed", -0.4)));
     }
 
     public Command testGroundIntake(){
@@ -118,6 +129,8 @@ public class Shooter extends SubsystemBase {
         // indxr.set(SmartDashboard.getNumber("Indxr Speed", 0));
         // shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0));
         // shooter.set(SmartDashboard.getNumber("Shooter Speed", 0));
+    SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
+    SmartDashboard.putNumber("Actual Velocity", shooterEncoder.getVelocity());
     }
 
     public Command stopIndxr() { 

@@ -46,6 +46,7 @@ public class Align extends Command {
         yController.setTolerance(1.7); // horizontal tolerance
 
         tagID = LimelightHelpers.getFiducialID("limelight"); // getting the ID from the april tag
+        LimelightHelpers.setPriorityTagID("limelight", 1); // only run if it sees this command
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Align extends Command {
             double ySpeed = -yController.calculate(LimelightHelpers.getTA("limelight"));
             double rotValue = -rotController.calculate(postions[4]);
 
-            drivebase.drive(new Translation2d(ySpeed, -xSpeed), rotValue, false);
+            drivebase.drive(new Translation2d(-ySpeed, xSpeed), rotValue, false);
 
             // if the robot is not at the end point
             if (!rotController.atSetpoint() ||
