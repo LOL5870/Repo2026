@@ -8,10 +8,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.Align;
@@ -20,10 +21,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
-import java.time.Instant;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 public class RobotContainer {
 
@@ -34,6 +32,8 @@ public class RobotContainer {
   // Swerve Initialization
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
+
+  private SendableChooser<Command> sendableChooser = new SendableChooser<>();
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
       () -> driverXbox.getLeftY() * -1,
@@ -49,10 +49,17 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    // Default Commands
 
     // Configure Bindings
     configureBindings();
+
+    // Setup optional paths
+    sendableChooser.setDefaultOption("Nothing", null);
+    sendableChooser.addOption("Go left", AutoBuilder.buildAuto("path 1"));
+    sendableChooser.addOption("Go to ground source", AutoBuilder.buildAuto("path 2"));
+    sendableChooser.addOption("Align to hub", align);
+
+    SmartDashboard.putData(sendableChooser);
 
     DriverStation.silenceJoystickConnectionWarning(true); // Get rid of controller error
   }
@@ -86,17 +93,14 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     try{
-      PathPlannerPath path1 = PathPlannerPath.fromPathFile("Path 1");
-
       return new SequentialCommandGroup( 
         new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-        AutoBuilder.followPath(path1)
-      
+        sendableChooser.getSelected()
         );
     }
     catch(Exception e)
     {
-      System.out.println("path exploded");
+      System.out.println("path did not run");
       return null;
     }
 
