@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.Align;
+import frc.robot.commands.swervedrive.AutoCommands.AutoShoot;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
@@ -55,9 +56,7 @@ public class RobotContainer {
 
     // Setup optional paths
     sendableChooser.setDefaultOption("Nothing", null);
-    sendableChooser.addOption("Go left", AutoBuilder.buildAuto("path 1"));
-    sendableChooser.addOption("Go to ground source", AutoBuilder.buildAuto("path 2"));
-    sendableChooser.addOption("Align to hub", align);
+    sendableChooser.addOption("To source and back", new AutoShoot(swerveSubsystem, shooter));
 
     SmartDashboard.putData(sendableChooser);
 
@@ -77,15 +76,13 @@ public class RobotContainer {
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
     driverXbox.leftBumper().whileTrue(shooter.shootCycle()).onFalse(shooter.stopCycles());
     driverXbox.a().whileTrue(shooter.testIndxr()).onFalse(shooter.stopIndxr());
+    driverXbox.b().whileTrue(align);
 
     // Operator Controllers
-    //opXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter()); 
+    opXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter()); 
     //opXbox.rightBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
-    // opXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake());
-    // opXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
-
-    driverXbox.b().whileTrue(align);
-    opXbox.a().onTrue(new InstantCommand(() -> LimelightHelpers.setPriorityTagID("limelight", 0)));
+    opXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake());
+    opXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
 
   }
 
@@ -94,8 +91,9 @@ public class RobotContainer {
 
     try{
       return new SequentialCommandGroup( 
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-        sendableChooser.getSelected()
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+          sendableChooser.getSelected()
+
         );
     }
     catch(Exception e)

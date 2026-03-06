@@ -129,20 +129,23 @@ public class Shooter extends SubsystemBase {
         // indxr.set(SmartDashboard.getNumber("Indxr Speed", 0));
         // shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0));
         // shooter.set(SmartDashboard.getNumber("Shooter Speed", 0));
-    SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
-    SmartDashboard.putNumber("Actual Velocity", shooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", shooterEncoder.getVelocity());
     }
 
     public Command stopIndxr() { 
         return runOnce(() -> indxr.set(0));
     }
-      public Command stopShooterIntake() { 
+
+    public Command stopShooterIntake() { 
         return runOnce(() -> shooterIntake.set(0));
     }
-      public Command stopGroundIntake() { 
+
+    public Command stopGroundIntake() { 
         return runOnce(() -> groundIntake.set(0));
     }
-          public Command stopShooter() { 
+
+    public Command stopShooter() { 
         return runOnce(() -> shooter.set(0));
     }
 
@@ -177,6 +180,5 @@ public class Shooter extends SubsystemBase {
             indxr.set(0);
             groundIntake.set(0);
         });
-
     }
 }
