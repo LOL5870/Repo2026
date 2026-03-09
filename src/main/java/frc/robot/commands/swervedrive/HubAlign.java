@@ -22,7 +22,7 @@ public class HubAlign extends Command{
     private SwerveSubsystem swerveSubsystem; 
     private PIDController rotController; 
     private double xTarget; 
-    private int[] tagIDs; 
+    private int[] tagIDs;
     
     
     public HubAlign(Supplier<Double> controllerX, Supplier<Double> controllerY, SwerveSubsystem subsystem) {
