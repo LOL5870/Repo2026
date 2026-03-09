@@ -67,4 +67,13 @@ public final class Constants {
     public static final PIDConstants shooterIntakePID = new PIDConstants(0.00028, 0.0, 0.0); 
     
   }
+
+  public static class HopperConstants{
+
+    // Change theses if needed
+    public static final int rightMotorID = 14;
+    public static final int leftMotorID = 15;
+
+  }
+
 }
