@@ -54,8 +54,8 @@ public class RobotContainer {
     configureBindings();
 
     // Setup optional paths
-    sendableChooser.setDefaultOption("Nothing", null);
-    sendableChooser.addOption("To source and back", new AutoShoot(swerveSubsystem, shooter));
+    // sendableChooser.setDefaultOption("Nothing", null);
+    // sendableChooser.addOption("To source and back", new AutoShoot(swerveSubsystem, shooter));
 
     SmartDashboard.putData(sendableChooser);
 
@@ -76,7 +76,7 @@ public class RobotContainer {
     driverXbox.leftBumper().whileTrue(shooter.shootCycle()).onFalse(shooter.stopCycles());
     driverXbox.a().whileTrue(shooter.testIndxr()).onFalse(shooter.stopIndxr());
     driverXbox.b().whileTrue(align);
-    driverXbox.rightBumper().whileTrue(new HubAlign(driverXbox::getLeftX, driverXbox::getLeftY, swerveSubsystem));
+    driverXbox.rightBumper().whileTrue(new HubAlign(driverXbox::getLeftX, driverXbox::getLeftY, swerveSubsystem, driverXbox));
 
     // Operator Controllers
     opXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter()); 

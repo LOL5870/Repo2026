@@ -79,7 +79,7 @@ public final class Constants {
   public static class AutoConstants{
     
     // PID
-    public static final PIDConstants HUB_ALIGN_PID = new PIDConstants(0, 0,0); 
+    public static final PIDConstants HUB_ALIGN_PID = new PIDConstants(0.08, 0,0);
     
     // x Offset for hub
     public static final double xOffsetSide = 1; 
@@ -100,11 +100,9 @@ public final class Constants {
   }
   
   public static class AprilTagIDs {
-
-
     
     // Apple tags
-    public static final int[] RED_HUB_APRIL_TAGS = {11, 10, 8};
+    public static final int[] RED_HUB_APRIL_TAGS = {11, 0, 8};
     public static final int[] BLUE_HUB_APRIL_TAGS = {27, 26, 24};
 
   }

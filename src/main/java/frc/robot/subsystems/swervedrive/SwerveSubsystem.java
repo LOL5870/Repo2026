@@ -388,14 +388,14 @@ public class SwerveSubsystem extends SubsystemBase {
    *                         smoother controls.
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-      DoubleSupplier angularRotationX) {
+  public Command driveCommand(Supplier<Double> translationX, Supplier<Double> translationY,
+      Supplier<Double> angularRotationX) {
     return run(() -> {
       // Make the robot move
       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-          translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-          translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-          Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+          translationX.get() * swerveDrive.getMaximumChassisVelocity(),
+          translationY.get() * swerveDrive.getMaximumChassisVelocity()), 0.8),
+          Math.pow(angularRotationX.get(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
           true,
           false);
     });

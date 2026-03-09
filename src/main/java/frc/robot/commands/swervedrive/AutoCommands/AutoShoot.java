@@ -19,7 +19,7 @@ public class AutoShoot extends SequentialCommandGroup{
             new WaitCommand(5),
             new Align(swerveSubsystem),
             new WaitCommand(1), 
-            new Shooter().shootCycle(),
+            shooter.shootCycle(),
             new WaitCommand(5),
             new Shooter().stopCycles()
         );            
