@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -13,18 +11,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.Align;
-import frc.robot.commands.swervedrive.HubAlign;
 import frc.robot.commands.swervedrive.AutoCommands.AutoShoot;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 public class RobotContainer {
 
@@ -56,23 +51,23 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-        // ShooterIntake tree map
-        shooterIntakeTreeMap.put(0.965, 3700.0); 
-        shooterIntakeTreeMap.put(1.00, 3550.0);  
-        shooterIntakeTreeMap.put(0.644, 3800.0); 
-        shooterIntakeTreeMap.put(0.372, 3950.0); 
-        shooterIntakeTreeMap.put(0.314, 4050.0); 
-        shooterIntakeTreeMap.put(0.234, 4400.0); 
-        shooterIntakeTreeMap.put(0.184, 4650.0); 
+    // ShooterIntake tree map
+    shooterIntakeTreeMap.put(0.965, 3700.0); 
+    shooterIntakeTreeMap.put(1.00, 3550.0);  
+    shooterIntakeTreeMap.put(0.644, 3800.0); 
+    shooterIntakeTreeMap.put(0.372, 3950.0); 
+    shooterIntakeTreeMap.put(0.314, 4050.0); 
+    shooterIntakeTreeMap.put(0.234, 4400.0); 
+    shooterIntakeTreeMap.put(0.184, 4650.0); 
 
-        // Shooter tree map
-        shooterTreeMap.put(0.965, 3500.0); 
-        shooterTreeMap.put(1.00, 3350.0); 
-        shooterTreeMap.put(0.644, 3600.0); 
-        shooterTreeMap.put(0.372, 3750.0); 
-        shooterTreeMap.put(0.314, 3850.0); 
-        shooterTreeMap.put(0.234, 4200.0); 
-        shooterTreeMap.put(0.184, 4450.0); 
+    // Shooter tree map
+    shooterTreeMap.put(0.965, 3500.0); 
+    shooterTreeMap.put(1.00, 3350.0); 
+    shooterTreeMap.put(0.644, 3600.0); 
+    shooterTreeMap.put(0.372, 3750.0); 
+    shooterTreeMap.put(0.314, 3850.0); 
+    shooterTreeMap.put(0.234, 4200.0); 
+    shooterTreeMap.put(0.184, 4450.0); 
 
 
     // Configure Bindings

@@ -74,10 +74,7 @@ public class HubAlign extends Command{
         }
 
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
-        // double rot = 0; 
 
-        //swerveSubsystem.drive(new Translation2d(controllerX.get(), controllerY.get()), rot, true);
-        //swerveSubsystem.driveCommand(() -> controller.getLeftX(), () -> controller.getLeftY(), () -> rot);
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), -controller.getLeftX(), rot, swerveSubsystem.getHeading());
         SwerveModuleState[] moduleStates = swerveSubsystem.getKinematics().toSwerveModuleStates(chassisSpeeds);
         swerveSubsystem.setChassisSpeeds(chassisSpeeds);
