@@ -159,13 +159,16 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Setup AutoBuilder for PathPlanner.
    */
-  public void setupPathPlanner() {
+   public void setupPathPlanner()
+  {
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
     RobotConfig config;
-    try {
+    try
+    {
       config = RobotConfig.fromGUISettings();
 
+      final boolean enableFeedforward = true;
       // Configure AutoBuilder last
       AutoBuilder.configure(
           this::getPose,
@@ -173,21 +176,28 @@ public class SwerveSubsystem extends SubsystemBase {
           this::resetOdometry,
           // Method to reset odometry (will be called if your auto has a starting pose)
           this::getRobotVelocity,
-
           // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speedsRobotRelative, moduleFeedForwards) -> {
+            if (enableFeedforward)
+            {
+              swerveDrive.drive(
+                  speedsRobotRelative,
+                  swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+                  moduleFeedForwards.linearForces()
+                               );
+            } else
+            {
               swerveDrive.setChassisSpeeds(speedsRobotRelative);
+            }
           },
-          
-          // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also
-          // optionally outputs individual module feedforwards
+          // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
-
-              new PIDConstants(1, 0, 0), 
-              // .137
-              // 0.013, 0, 0.015
-              new PIDConstants(0, 0, 0)),
-
+              // PPHolonomicController is the built in path following controller for holonomic drive trains
+              new PIDConstants(5.0, 0.0, 0.0),
+              // Translation PID constants
+              new PIDConstants(5.0, 0.0, 0.0)
+              // Rotation PID constants
+          ),
           config,
           // The robot configuration
           () -> {
@@ -196,21 +206,23 @@ public class SwerveSubsystem extends SubsystemBase {
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
             var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
+            if (alliance.isPresent())
+            {
               return alliance.get() == DriverStation.Alliance.Red;
             }
             return false;
           },
           this
-      // Reference to this subsystem to set requirements
-      );
+          // Reference to this subsystem to set requirements
+                           );
 
-    } catch (Exception e) {
+    } catch (Exception e)
+    {
       // Handle exception as needed
       e.printStackTrace();
     }
 
-    // Preload PathPlanner Path finding
+    //Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
   }
@@ -376,14 +388,14 @@ public class SwerveSubsystem extends SubsystemBase {
    *                         smoother controls.
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-      DoubleSupplier angularRotationX) {
+  public Command driveCommand(Supplier<Double> translationX, Supplier<Double> translationY,
+      Supplier<Double> angularRotationX) {
     return run(() -> {
       // Make the robot move
       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-          translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-          translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-          Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+          translationX.get() * swerveDrive.getMaximumChassisVelocity(),
+          translationY.get() * swerveDrive.getMaximumChassisVelocity()), 0.8),
+          Math.pow(angularRotationX.get(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
           true,
           false);
     });
