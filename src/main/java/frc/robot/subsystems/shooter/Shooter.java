@@ -127,11 +127,16 @@ public class Shooter extends SubsystemBase {
 
     // printing out the speeds of the motors to elastic
     public Command testShooter(){
-        return run(()-> shooter.set(SmartDashboard.getNumber("Shooter Speed", 0)));
+        return run(()-> {
+            shooterController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
+            shooterIntake.set(-0.5);
+        
+        }); 
     }
 
     public Command testShooterIntake(){
-        return run(()-> shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0)));
+        return run(()-> shooterIntakeController.setSetpoint(-SmartDashboard.getNumber("ShooterIntake Speed", 0), ControlType.kMAXMotionVelocityControl));
+
     }
 
     public Command testIndxr(){
@@ -180,10 +185,11 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public Command shootCycle(Supplier<Double> shooterIntakeDist){
+    public Command shootCycle(Supplier<Double> shooterIntakeDist, Supplier<Double> shooterDist){
         return run(()->{
             shooterIntakeController.setSetpoint(-shooterIntakeDist.get(), ControlType.kMAXMotionVelocityControl); 
-            indxr.set(0.6);
+            shooterController.setSetpoint(shooterDist.get(), ControlType.kMAXMotionVelocityControl);
+            // indxr.set(0.6);
         });
     }
 

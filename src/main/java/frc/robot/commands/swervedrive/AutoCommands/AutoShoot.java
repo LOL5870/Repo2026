@@ -20,9 +20,9 @@ public class AutoShoot extends SequentialCommandGroup{
         addCommands(
             // AutoBuilder.buildAuto("path 1"),
             // new WaitCommand(5),
-            new Align(swerveSubsystem),
+            //new Align(swerveSubsystem),
             // new WaitCommand(1), 
-            new InstantCommand(() -> shooter.shootCycle(dist))
+            //new InstantCommand(() -> shooter.shootCycle(dist))
             // new InstantCommand(() -> shooter.stopCycles())
         );
     }
