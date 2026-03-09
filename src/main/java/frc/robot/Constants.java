@@ -63,8 +63,8 @@ public final class Constants {
     public static final double GROUND_MAX_SPEED = 0.9; 
 
     // PID
-    public static final PIDConstants shooterPID = new PIDConstants(0.0, 0.0, 0.0); 
-    public static final PIDConstants shooterIntakePID = new PIDConstants(0.0, 0.0, 0.0); 
+    public static final PIDConstants shooterPID = new PIDConstants(0.00015, 0.0, 0.0); 
+    public static final PIDConstants shooterIntakePID = new PIDConstants(0.00028, 0.0, 0.0); 
     
   }
 }

@@ -37,16 +37,16 @@ public class Align extends Command {
         this.dontSeeTagTimer.start();
 
         rotController.setSetpoint(0); // rotation value end point
-        rotController.setTolerance(1); // rotation tolerance
+        rotController.setTolerance(1); // rotation tolerances
 
-        xController.setSetpoint(0); // distance value end point
+        xController.setSetpoint(3.53); // distance value end point
         xController.setTolerance(0.9); // distance tolerance
 
-        yController.setSetpoint(1.5); // horizontal value end point
-        yController.setTolerance(1.7); // horizontal tolerance
+        yController.setSetpoint(.5); // horizontal value end point
+        yController.setTolerance(.2); // horizontal tolerance
 
         tagID = LimelightHelpers.getFiducialID("limelight"); // getting the ID from the april tag
-        LimelightHelpers.setPriorityTagID("limelight", 1); // only run if it sees this command
+        LimelightHelpers.setPriorityTagID("limelight", 0); // only run if it sees this command
     }
 
     @Override
@@ -83,8 +83,9 @@ public class Align extends Command {
 
     @Override
     public boolean isFinished() {
-        // Requires the robot to stay in the correct position for 0.3 seconds, as long
-        // as it gets a tag in the camera
-        return false;
+        if(xController.atSetpoint() && yController.atSetpoint() && rotController.atSetpoint())
+            return true; 
+        else
+            return false; 
     }
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,13 +23,15 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 public class RobotContainer {
 
   // Initialize Controllers
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController opXbox = new CommandXboxController(1);
+  InterpolatingDoubleTreeMap  shooterIntakeTreeMap = new InterpolatingDoubleTreeMap(); 
+  InterpolatingDoubleTreeMap  shooterTreeMap = new InterpolatingDoubleTreeMap();
+
 
   // Swerve Initialization
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -50,13 +53,21 @@ public class RobotContainer {
 
 
   public RobotContainer() {
+    
+        shooterIntakeTreeMap.put(1.750, 3450.0); 
+        shooterIntakeTreeMap.put(1.622, 3500.0); 
+        shooterIntakeTreeMap.put(0.644, 3750.0); 
+        shooterIntakeTreeMap.put(0.372, 3900.0); 
+        shooterIntakeTreeMap.put(0.314, 4000.0); 
+        shooterIntakeTreeMap.put(0.234, 4350.0); 
+        shooterIntakeTreeMap.put(0.184, 4600.0); 
 
     // Configure Bindings
     configureBindings();
 
     // Setup optional paths
     sendableChooser.setDefaultOption("Nothing", null);
-    sendableChooser.addOption("To source and back", new AutoShoot(swerveSubsystem, shooter));
+    // sendableChooser.addOption("To source and back", new AutoShoot(swerveSubsystem, shooter));
 
     SmartDashboard.putData(sendableChooser);
 
@@ -74,34 +85,22 @@ public class RobotContainer {
 
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.leftBumper().whileTrue(shooter.shootCycle()).onFalse(shooter.stopCycles());
-    driverXbox.a().whileTrue(shooter.testIndxr()).onFalse(shooter.stopIndxr());
-    driverXbox.b().whileTrue(align);
+    driverXbox.leftBumper().whileTrue(shooter.shootCycle(() -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")))).onFalse(shooter.stopCycles());
+    driverXbox.a().whileTrue(shooter.startIndxr()).onFalse(shooter.stopIndxr());
+    driverXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
+    driverXbox.x().whileTrue(new Align(swerveSubsystem));
 
     // Operator Controllers
-    opXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter()); 
-    //opXbox.rightBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
-    opXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake());
-    opXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
+    // opXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake()); 
+    // //opXbox.rightBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
+    // opXbox.a().whileTrue(shooter.testGroundIntake()).onFalse(shooter.stopGroundIntake());
+    // opXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
 
   }
 
 
   public Command getAutonomousCommand() {
-
-    try{
-      return new SequentialCommandGroup( 
-          new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-          sendableChooser.getSelected()
-
-        );
-    }
-    catch(Exception e)
-    {
-      System.out.println("path did not run");
-      return null;
-    }
-
+    return new AutoShoot(swerveSubsystem, shooter, () -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight"))); 
   }
   
   public void setMotorBrake(boolean brake) {
