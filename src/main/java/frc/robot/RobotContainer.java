@@ -61,8 +61,8 @@ public class RobotContainer {
     shooterIntakeTreeMap.put(0.184, 4650.0); 
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3500.0); 
-    shooterTreeMap.put(1.00, 3350.0); 
+    shooterTreeMap.put(0.965, 3500.0);
+    shooterTreeMap.put(1.00, 3350.0);
     shooterTreeMap.put(0.644, 3600.0); 
     shooterTreeMap.put(0.372, 3750.0); 
     shooterTreeMap.put(0.314, 3850.0); 

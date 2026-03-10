@@ -117,34 +117,10 @@ public class Shooter extends SubsystemBase {
         // Initialzing the widgets
         SmartDashboard.setDefaultNumber("Shooter Speed", 0);
         SmartDashboard.setDefaultNumber("ShooterIntake Speed", 0);
-        SmartDashboard.setDefaultNumber("Indxr speed", -0.4);
-        SmartDashboard.setDefaultNumber("GroundIntake Speed", 0); 
         SmartDashboard.setDefaultNumber("ShooterIntake RPM", 0);
         
 
 
-    }
-
-    // printing out the speeds of the motors to elastic
-    public Command testShooter(){
-        return run(()-> {
-            shooterController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
-            shooterIntake.set(-0.5);
-        
-        }); 
-    }
-
-    public Command testShooterIntake(){
-        return run(()-> shooterIntakeController.setSetpoint(-SmartDashboard.getNumber("ShooterIntake Speed", 0), ControlType.kMAXMotionVelocityControl));
-
-    }
-
-    public Command testIndxr(){
-        return run(()-> indxr.set(SmartDashboard.getNumber("Indxr speed", -0.4)));
-    }
-
-    public Command testGroundIntake(){
-        return run(()-> groundIntake.set(SmartDashboard.getNumber("GroundIntake Speed", 0)));
     }
 
     @Override
@@ -174,6 +150,20 @@ public class Shooter extends SubsystemBase {
 
     public Command stopShooter() { 
         return runOnce(() -> shooter.set(0));
+    }
+
+    // printing out the speeds of the motors to elastic
+    public Command testShooter(){
+        return run(()-> {
+            shooterController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
+            shooterIntake.set(-0.5);
+        
+        }); 
+    }
+
+    public Command testShooterIntake(){
+        return run(()-> shooterIntakeController.setSetpoint(-SmartDashboard.getNumber("ShooterIntake Speed", 0), ControlType.kMAXMotionVelocityControl));
+
     }
 
     public Command startIntakeCycle(){
