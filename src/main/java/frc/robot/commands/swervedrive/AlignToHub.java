@@ -4,6 +4,8 @@
 
 package frc.robot.commands.swervedrive;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,11 +19,13 @@ public class AlignToHub extends Command {
     private PIDController yController;
 
     private SwerveSubsystem drivebase;
+    private Supplier<Double> ysetpoint;
 
-    public AlignToHub(SwerveSubsystem drivebase) {
+    public AlignToHub(SwerveSubsystem drivebase, Supplier<Double> ysetpoint) {
         
         yController = new PIDController(1.5, 0.0, 0); // Horitontal movement
         this.drivebase = drivebase;
+        this.ysetpoint = ysetpoint;
         addRequirements(drivebase);
     }
 
@@ -29,21 +33,21 @@ public class AlignToHub extends Command {
     public void initialize() {
 
         yController.setTolerance(.2); // horizontal tolerance
-        SmartDashboard.setDefaultNumber("y setpoint", 0);
         LimelightHelpers.setPriorityTagID("limelight", 0); // only run if it sees this command
     }
 
     @Override
     public void execute() {
-        double setpoint = SmartDashboard.getNumber("y setpoint", 0); 
+
         // if camera has detected a april tag...
         if (LimelightHelpers.getTV("limelight")) {
 
-            double ySpeed = -yController.calculate(LimelightHelpers.getTA("limelight"), setpoint);
+            double ySpeed = -yController.calculate(LimelightHelpers.getTA("limelight"), ysetpoint.get());
 
-            drivebase.drive(new Translation2d(-ySpeed, 0), 0, false);
+            drivebase.drive(new Translation2d(ySpeed, 0), 0, false);
+
+            System.out.println(LimelightHelpers.getTA("limelight"));
         }
-
     }
 
     @Override

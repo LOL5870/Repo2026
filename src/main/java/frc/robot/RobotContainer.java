@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -11,15 +13,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.Align;
+import frc.robot.commands.swervedrive.AlignToHub;
+import frc.robot.commands.swervedrive.HubAlign;
+import frc.robot.commands.swervedrive.ShootCycle;
 import frc.robot.commands.swervedrive.AutoCommands.AutoShoot;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.lang.ModuleLayer.Controller;
+
+import org.json.simple.parser.ParseException;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 public class RobotContainer {
 
@@ -28,6 +46,7 @@ public class RobotContainer {
   final CommandXboxController opXbox = new CommandXboxController(1);
   InterpolatingDoubleTreeMap  shooterIntakeTreeMap = new InterpolatingDoubleTreeMap(); 
   InterpolatingDoubleTreeMap  shooterTreeMap = new InterpolatingDoubleTreeMap();
+  Hopper hopper = new Hopper();
 
 
   // Swerve Initialization
@@ -51,23 +70,22 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    // ShooterIntake tree map
-    shooterIntakeTreeMap.put(0.965, 3700.0); 
-    shooterIntakeTreeMap.put(1.00, 3550.0);  
-    shooterIntakeTreeMap.put(0.644, 3800.0); 
-    shooterIntakeTreeMap.put(0.372, 3950.0); 
-    shooterIntakeTreeMap.put(0.314, 4050.0); 
-    shooterIntakeTreeMap.put(0.234, 4400.0); 
-    shooterIntakeTreeMap.put(0.184, 4650.0); 
+        // ShooterIntake tree map
+        shooterIntakeTreeMap.put(0.965, 3550.0); 
+        shooterIntakeTreeMap.put(0.765, 3600.0);
+        shooterIntakeTreeMap.put(0.545, 3650.0); 
+        shooterIntakeTreeMap.put(0.375, 3900.0); 
+        shooterIntakeTreeMap.put(0.315, 3975.0); 
+        shooterIntakeTreeMap.put(0.235, 4125.0); 
+  
+        // Shooter tree map
+        shooterTreeMap.put(0.965, 3500.0); 
+        shooterTreeMap.put(0.765, 3550.0); 
+        shooterTreeMap.put(0.545, 3675.0);
+        shooterTreeMap.put(0.375, 3825.0); 
+        shooterTreeMap.put(0.315, 3900.0); 
+        shooterTreeMap.put(0.235, 4050.0); 
 
-    // Shooter tree map
-    shooterTreeMap.put(0.965, 3500.0);
-    shooterTreeMap.put(1.00, 3350.0);
-    shooterTreeMap.put(0.644, 3600.0); 
-    shooterTreeMap.put(0.372, 3750.0); 
-    shooterTreeMap.put(0.314, 3850.0); 
-    shooterTreeMap.put(0.234, 4200.0); 
-    shooterTreeMap.put(0.184, 4450.0); 
 
 
     // Configure Bindings
@@ -93,14 +111,17 @@ public class RobotContainer {
 
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    // driverXbox.leftBumper().whileTrue(shooter.shootCycle(() -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")), () -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")))).onFalse(shooter.stopCycles());
-    driverXbox.a().whileTrue(shooter.startIndxr()).onFalse(shooter.stopIndxr());
+    driverXbox.leftBumper().whileTrue(new ShootCycle(() -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")), () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),() ->  driverXbox.a().getAsBoolean(), shooter)).onFalse(shooter.stopCycles());
+    driverXbox.axisGreaterThan(3, .1).whileTrue(hopper.hopperIn(() -> driverXbox.getRightTriggerAxis())).onFalse(hopper.stopHopper());
+    driverXbox.axisGreaterThan(2, .1).whileTrue(hopper.hopperOut(()-> driverXbox.getLeftTriggerAxis())).onFalse(hopper.stopHopper());
+    // driverXbox.a().whileTrue(shooter.startIndxr()).onFalse(shooter.stopIndxr());
     //driverXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
-    driverXbox.x().whileTrue(new Align(swerveSubsystem));
-    driverXbox.rightBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopCycles());
+    // driverXbox.x().whileTrue(new Align(swerveSubsystem));
+    driverXbox.rightBumper().whileTrue(new HubAlign(driverXbox::getLeftX, driverXbox::getLeftY, swerveSubsystem, driverXbox));
+    //driverXbox.b().whileTrue(new AlignToHub(swerveSubsystem, () -> shooter.getYsetpoint()));
 
     // driverXbox.rightBumper().whileTrue(new HubAlign(driverXbox::getLeftX, driverXbox::getLeftY, swerveSubsystem, driverXbox));
-    driverXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopCycles());
+    //driverXbox.leftBumper().whileTrue(shooter.testShooter()).onFalse(shooter.stopCycles());
     // Operator Controllers
     // opXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake()); 
     // //opXbox.rightBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
@@ -112,7 +133,32 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    return new AutoShoot(swerveSubsystem, shooter, () -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight"))); 
+    try {
+      PathPlannerPath startPath = PathPlannerPath.fromPathFile("start");
+      return new SequentialCommandGroup(
+      new InstantCommand(()-> swerveSubsystem.resetOdometry(startPath.getStartingHolonomicPose().get())),
+      AutoBuilder.followPath(PathPlannerPath.fromPathFile("start")),
+      new WaitCommand(2).deadlineFor(shooter.shootCycle(() -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")), () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")))),
+      new ParallelCommandGroup(
+        new Align(swerveSubsystem),
+        shooter.shootCycle(() -> shooterIntakeTreeMap.get(LimelightHelpers.getTA("limelight")), () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight"))),
+        new InstantCommand(() -> shooter.startIndxr()),
+        new WaitCommand(6).deadlineFor(shooter.stopCycles())
+      ) 
+
+
+    );
+
+    } catch (FileVersionException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } 
+
+    return null; 
+    
   }
   
   public void setMotorBrake(boolean brake) {

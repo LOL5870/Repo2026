@@ -22,15 +22,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Shooter extends SubsystemBase {
     
     // Define Motors
-    SparkMax shooter; 
-    SparkMax shooterIntake;
-    SparkMax indxr; 
+    public SparkMax shooter; 
+    public SparkMax shooterIntake;
+    public SparkMax indxr; 
     SparkMax groundIntake; 
 
     // Define Configurations
-    SparkMaxConfig shooterConfig; 
-    SparkMaxConfig shooterIntakeConfig; 
-    SparkMaxConfig indxrConfig; 
+    public SparkMaxConfig shooterConfig; 
+    public SparkMaxConfig shooterIntakeConfig; 
+    public SparkMaxConfig indxrConfig; 
     SparkMaxConfig groundIntakeConfig; 
     
     // Define Encoders
@@ -38,10 +38,10 @@ public class Shooter extends SubsystemBase {
     RelativeEncoder shooterEncoder;    
 
     // Define closed loop controllers
-    SparkClosedLoopController shooterIntakeController;
-    SparkClosedLoopController shooterController; 
+    public SparkClosedLoopController shooterIntakeController;
+    public SparkClosedLoopController shooterController; 
 
-    // Tree maps
+    double ysetpoint;
      
     
 
@@ -118,8 +118,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.setDefaultNumber("Shooter Speed", 0);
         SmartDashboard.setDefaultNumber("ShooterIntake Speed", 0);
         SmartDashboard.setDefaultNumber("ShooterIntake RPM", 0);
-        
-
+        SmartDashboard.setDefaultNumber("y setpoint", 0); 
+    
 
     }
 
@@ -132,9 +132,15 @@ public class Shooter extends SubsystemBase {
         // SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
         SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter Intake Velocity", shooterIntakeEncoder.getVelocity());
+        ysetpoint = SmartDashboard.getNumber(" y setpoint", 0);
         // SmartDashboard.putNumber("cONV")
 
     }   
+
+    public double getYsetpoint(){
+        return ysetpoint;
+    }
+
 
     public Command stopIndxr() { 
         return runOnce(() -> indxr.set(0));
@@ -156,7 +162,6 @@ public class Shooter extends SubsystemBase {
     public Command testShooter(){
         return run(()-> {
             shooterController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
-            shooterIntake.set(-0.5);
         
         }); 
     }
@@ -176,17 +181,16 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command shootCycle(Supplier<Double> shooterIntakeDist, Supplier<Double> shooterDist){
+
+
         return run(()->{
             shooterIntakeController.setSetpoint(-shooterIntakeDist.get(), ControlType.kMAXMotionVelocityControl); 
             shooterController.setSetpoint(shooterDist.get(), ControlType.kMAXMotionVelocityControl);
-            // indxr.set(0.6);
         });
     }
 
-    public Command startIndxr() {
-        return run(() -> { 
+    public void startIndxr() {
             indxr.set(0.6);
-        }); 
     }
 
     public Command ejectFuel(){

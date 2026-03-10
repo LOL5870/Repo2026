@@ -71,8 +71,8 @@ public final class Constants {
   public static class HopperConstants{
 
     // Change theses if needed
-    public static final int rightMotorID = 14;
-    public static final int leftMotorID = 15;
+    public static final int rightMotorID = 7;
+    public static final int leftMotorID = 2;
 
   }
 

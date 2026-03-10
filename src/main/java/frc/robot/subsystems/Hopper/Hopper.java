@@ -1,5 +1,7 @@
 package frc.robot.subsystems.hopper;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,12 +24,13 @@ public class Hopper extends SubsystemBase{
     }
 
 
-    public Command hopperIn(){
-        return run(()-> leaderMotor.set(0.2));
+    public Command hopperIn(Supplier<Double> speed){
+        System.out.println(speed.get());
+        return run(()-> leaderMotor.set(speed.get()));
     }
 
-    public Command hopperOut(){
-        return run(()-> leaderMotor.set(-0.2));
+    public Command hopperOut(Supplier<Double> speed){
+        return run(()-> leaderMotor.set(-speed.get()));
     }
     
     public Command stopHopper(){
