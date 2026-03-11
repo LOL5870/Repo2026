@@ -24,7 +24,7 @@ public class AutoShoot extends Command{
 
     @Override
     public void execute() {
-        shooter.setRPM(shooterRPM);
+        shooter.setRPM(shooterRPM.get());
 
         if(shooter.getShooterRPM() > shooterRPM.get() - 300 && !rpmReached) { 
             rpmReached = true;

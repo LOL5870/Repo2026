@@ -88,6 +88,8 @@ public class RobotContainer {
     driverXbox.axisGreaterThan(3, .1).whileTrue(hopper.hopperIn(() -> driverXbox.getRightTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.axisGreaterThan(2, .1).whileTrue(hopper.hopperOut(()-> driverXbox.getLeftTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox));
+    driverXbox.b().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
+    driverXbox.x().whileTrue(shooter.startFeedShooter()).onFalse(new InstantCommand(() -> shooter.stopFeed()));
     // driverXbox.b().whileTrue(hopper.oscillateHopper()); 
    
     // Operator Controllers

@@ -21,9 +21,6 @@ public class Hopper extends SubsystemBase{
         leaderMotor =  new VictorSP(HopperConstants.leftMotorID);
         followMotor =  new VictorSP(HopperConstants.rightMotorID);
 
-        followMotor.setInverted(true);
-        leaderMotor.addFollower(followMotor);
-
         SmartDashboard.setDefaultNumber("Hopper Speed", 0); 
         SmartDashboard.setDefaultNumber("Hopper Timeout", 0); 
     }
@@ -31,11 +28,19 @@ public class Hopper extends SubsystemBase{
 
     public Command hopperIn(Supplier<Double> speed){
         System.out.println(speed.get());
-        return run(()-> leaderMotor.set(speed.get()));
+        return run(()-> {
+            leaderMotor.set(speed.get()*1.2);
+            followMotor.set(speed.get());
+
+        });
     }
 
     public Command hopperOut(Supplier<Double> speed){
-        return run(()-> leaderMotor.set(-speed.get()));
+        return run(()-> {
+            leaderMotor.set(-speed.get()*1.2);
+            followMotor.set(-speed.get());
+
+        });
     }
 
     public Command oscillateHopper() { 
@@ -47,8 +52,10 @@ public class Hopper extends SubsystemBase{
     }
     
     public Command stopHopper(){
-        return run((()-> leaderMotor.stopMotor()));
-    }
+        return run(()-> {
+            leaderMotor.stopMotor();
+            followMotor.stopMotor();;
+        });    }
 
 
     @Override

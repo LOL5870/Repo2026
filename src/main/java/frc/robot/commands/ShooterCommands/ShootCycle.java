@@ -25,7 +25,7 @@ public class ShootCycle extends Command{
 
     @Override
     public void execute() {
-        shooter.setRPM(shooterRPM);
+        shooter.setRPM(shooterRPM.get());
         if(isFeed.get()){
             shooter.feedFuel();
         }
@@ -39,6 +39,7 @@ public class ShootCycle extends Command{
         shooter.stopShooter();
         shooter.stopIndxr();
         shooter.stopIntakeFlaps();
+        shooter.stopCycles();
     }
 
     @Override

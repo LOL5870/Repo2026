@@ -30,11 +30,11 @@ public final class Constants {
 
   public static class ShooterIntakeConstants { 
     // IDS
-    public static final int ShooterRightID = 11; 
+    public static final int ShooterRightID = 14; 
     public static final int ShooterLeftID = 10; 
     public static final int GroundIntakeID = 13;
     public static final int IndxrID = 12; 
-    public static final int IntakeFlapsID = 14; 
+    public static final int IntakeFlapsID = 11; 
 
     // MIN SPEEDS
     public static final double SHOOTER_MIN_SPEED = -1; 
@@ -50,15 +50,16 @@ public final class Constants {
 
 
     // PID
-    public static final PIDConstants shooterPID = new PIDConstants(0.00015, 0.0, 0.0); 
+    public static final PIDConstants shooterPID = new PIDConstants(0.00015, 0.0, 0.0);
+    public static final PIDConstants shooter2PID = new PIDConstants(0.00009,0,0);
     
   }
 
   public static class HopperConstants{
 
     // Change theses if needed
-    public static final int rightMotorID = 7;
-    public static final int leftMotorID = 2;
+    public static final int rightMotorID = 6;
+    public static final int leftMotorID = 7;
 
   }
 
