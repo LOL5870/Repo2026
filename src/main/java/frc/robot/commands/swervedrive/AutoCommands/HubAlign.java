@@ -1,12 +1,7 @@
-package frc.robot.commands.swervedrive;
-
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
+package frc.robot.commands.swervedrive.AutoCommands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,7 +16,6 @@ import frc.robot.Constants.AprilTagIDs;
 
 public class HubAlign extends Command{
     
-    private Supplier<Double> controllerX, controllerY; 
     private SwerveSubsystem swerveSubsystem; 
     private PIDController rotController; 
     private double xTarget;
@@ -29,10 +23,8 @@ public class HubAlign extends Command{
     private int[] tagIDs;
     
     
-    public HubAlign(Supplier<Double> controllerX, Supplier<Double> controllerY, SwerveSubsystem subsystem, CommandXboxController controller) {
+    public HubAlign(SwerveSubsystem subsystem, CommandXboxController controller) {
 
-        this.controllerX = controllerX;
-        this.controllerY = controllerX;
         this.swerveSubsystem = subsystem;
         this.controller = controller;
 
@@ -44,9 +36,11 @@ public class HubAlign extends Command{
     @Override
     public void initialize() {
         // if(DriverStation.getAlliance().get() == Alliance.Red)
-            tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS; 
+        //     tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS; 
         // else
         //     tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
+
+        tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
     }
 
     @Override
@@ -76,13 +70,11 @@ public class HubAlign extends Command{
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), -controller.getLeftX(), rot, swerveSubsystem.getHeading());
-        SwerveModuleState[] moduleStates = swerveSubsystem.getKinematics().toSwerveModuleStates(chassisSpeeds);
         swerveSubsystem.setChassisSpeeds(chassisSpeeds);
     }
 
     @Override
     public void end(boolean interrupted) {
-
     }
 
     @Override

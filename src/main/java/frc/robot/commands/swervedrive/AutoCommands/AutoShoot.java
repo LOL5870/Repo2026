@@ -2,25 +2,59 @@ package frc.robot.commands.swervedrive.AutoCommands;
 
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.swervedrive.Align;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class AutoShoot extends SequentialCommandGroup{
+public class AutoShoot extends Command{
 
-    public AutoShoot(SwerveSubsystem swerveSubsystem, Shooter shooter, Supplier<Double> dist){
-        
-        new AutoBuilder();
+    private Supplier<Double> shooterIntakeRPM;
+    private Supplier<Double> shooterRPM;
+    private Shooter shooter;
+    private boolean rpmReached;
 
-        addCommands(
+    public AutoShoot(Supplier<Double> shooterRPM,Supplier<Double> shooterIntakeRPM, Shooter shooter){
 
-            
-
-        );
+        this.shooterRPM = shooterRPM;
+        this.shooterIntakeRPM = shooterIntakeRPM;
+        this.shooter = shooter;
+        addRequirements(shooter);
     }
+
+    @Override
+    public void initialize() {
+        rpmReached = false;
+    }
+
+    @Override
+    public void execute() {
+
+        shooter.setIntakeRPM(shooterIntakeRPM);
+        shooter.setShooterRPM(shooterRPM);
+
+        if(shooter.getShooterRPM() > shooterRPM.get() - 500  && shooter.getShooterIntakeRPM() > shooterIntakeRPM.get() - 500 && !rpmReached){
+            rpmReached = true;
+        }
+
+        if(rpmReached){
+            shooter.feedFuel();
+        }
+
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        shooter.stopFeed();
+        shooter.stopIndxr();
+        shooter.stopShooter();
+        shooter.stopShooterIntake();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
+
+    
+    
 }

@@ -12,11 +12,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterIntakeConstants;
-import frc.robot.subsystems.vision.LimelightHelpers;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Shooter extends SubsystemBase {
@@ -41,9 +39,6 @@ public class Shooter extends SubsystemBase {
     public SparkClosedLoopController shooterIntakeController;
     public SparkClosedLoopController shooterController; 
 
-    double ysetpoint;
-     
-    
 
     public Shooter(){
         
@@ -117,30 +112,16 @@ public class Shooter extends SubsystemBase {
         // Initialzing the widgets
         SmartDashboard.setDefaultNumber("Shooter Speed", 0);
         SmartDashboard.setDefaultNumber("ShooterIntake Speed", 0);
-        SmartDashboard.setDefaultNumber("ShooterIntake RPM", 0);
-        SmartDashboard.setDefaultNumber("y setpoint", 0); 
     
-
     }
 
     @Override
     public void periodic() {
-        // groundIntake.set(SmartDashboard.getNumber("GroundIntake Speed", 0));
-        // indxr.set(SmartDashboard.getNumber("Indxr Speed", 0));
-        // shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0));
-        // shooter.set(SmartDashboard.getNumber("Shooter Speed", 0));
-        // SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
+
         SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter Intake Velocity", shooterIntakeEncoder.getVelocity());
-        ysetpoint = SmartDashboard.getNumber(" y setpoint", 0);
-        // SmartDashboard.putNumber("cONV")
 
     }   
-
-    public double getYsetpoint(){
-        return ysetpoint;
-    }
-
 
     public Command stopIndxr() { 
         return runOnce(() -> indxr.set(0));
@@ -182,15 +163,10 @@ public class Shooter extends SubsystemBase {
 
     public Command shootCycle(Supplier<Double> shooterIntakeDist, Supplier<Double> shooterDist){
 
-
         return run(()->{
             shooterIntakeController.setSetpoint(-shooterIntakeDist.get(), ControlType.kMAXMotionVelocityControl); 
             shooterController.setSetpoint(shooterDist.get(), ControlType.kMAXMotionVelocityControl);
         });
-    }
-
-    public void startIndxr() {
-            indxr.set(0.6);
     }
 
     public Command ejectFuel(){
@@ -208,5 +184,34 @@ public class Shooter extends SubsystemBase {
             indxr.stopMotor();
             groundIntake.stopMotor();
         });
+    }
+
+    public void startIndxr() {
+        indxr.set(0.6);
+    }
+
+    public void setShooterRPM(Supplier<Double> rpm){
+        shooterController.setSetpoint(rpm.get(), ControlType.kMAXMotionVelocityControl);
+    }
+    
+    public double getShooterRPM(){
+        return shooterEncoder.getVelocity();
+    }
+
+
+    public void setIntakeRPM(Supplier<Double> rpm){
+        shooterIntakeController.setSetpoint(rpm.get(), ControlType.kMAXMotionVelocityControl);
+    }
+
+    public double getShooterIntakeRPM(){
+        return shooterIntakeEncoder.getVelocity();
+    }
+
+    public void feedFuel(){
+        indxr.set(0.6);
+    }
+
+    public void stopFeed(){
+        indxr.stopMotor();
     }
 }

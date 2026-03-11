@@ -1,4 +1,4 @@
-package frc.robot.commands.swervedrive;
+package frc.robot.commands.swervedrive.ShooterCommands;
 
 import java.util.function.Supplier;
 
@@ -20,6 +20,7 @@ public class ShootCycle extends Command{
         this.shooterDist = shooterDist;
         this.shooterIntakeDist = shooterIntakeDist;
         this.shooter = shooter;
+        
         addRequirements(shooter);
     }
 
