@@ -5,197 +5,163 @@ import java.util.function.Supplier;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterIntakeConstants;
-import frc.robot.subsystems.vision.LimelightHelpers;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Shooter extends SubsystemBase {
     
     // Define Motors
-    public SparkMax shooter; 
-    public SparkMax shooterIntake;
+    public SparkMax shooterLeft; 
+    public SparkMax shooterRight;
     public SparkMax indxr; 
-    SparkMax groundIntake; 
+    public SparkMax groundIntake; 
+    public SparkMax intakeFlap;
 
     // Define Configurations
-    public SparkMaxConfig shooterConfig; 
-    public SparkMaxConfig shooterIntakeConfig; 
+    public SparkMaxConfig shooterLeftConfig;
+    public SparkMaxConfig shooterRightConfig; 
     public SparkMaxConfig indxrConfig; 
-    SparkMaxConfig groundIntakeConfig; 
+    public SparkMaxConfig groundIntakeConfig;
+    public SparkMaxConfig intakeFlapConfig;
     
     // Define Encoders
-    RelativeEncoder shooterIntakeEncoder; 
-    RelativeEncoder shooterEncoder;    
+    public RelativeEncoder shooterRightEncoder;
+    public RelativeEncoder shooterLeftEncoder;
 
     // Define closed loop controllers
-    public SparkClosedLoopController shooterIntakeController;
-    public SparkClosedLoopController shooterController; 
-
-    double ysetpoint;
-     
+    public SparkClosedLoopController shooterRightController;
+    public SparkClosedLoopController shooterLeftController;      
     
 
     public Shooter(){
         
         // Initialize the Motors
-        shooter = new SparkMax(ShooterIntakeConstants.ShooterID, MotorType.kBrushless); 
-        shooterIntake = new SparkMax(ShooterIntakeConstants.ShooterIntakeID, MotorType.kBrushless); 
+        shooterLeft = new SparkMax(ShooterIntakeConstants.ShooterLeftID, MotorType.kBrushless); 
+        shooterRight = new SparkMax(ShooterIntakeConstants.ShooterRightID, MotorType.kBrushless); 
         indxr = new SparkMax(ShooterIntakeConstants.IndxrID, MotorType.kBrushless); 
         groundIntake = new SparkMax(ShooterIntakeConstants.GroundIntakeID, MotorType.kBrushless);
+        intakeFlap = new SparkMax(ShooterIntakeConstants.IntakeFlapsID, MotorType.kBrushless);
         
         // Inialize Configuratons
-        shooterConfig = new SparkMaxConfig();
-        shooterIntakeConfig = new SparkMaxConfig();
+        shooterLeftConfig = new SparkMaxConfig();
+        shooterRightConfig = new SparkMaxConfig();
         indxrConfig = new SparkMaxConfig();
         groundIntakeConfig = new SparkMaxConfig();
+        intakeFlapConfig = new SparkMaxConfig();
 
         // Initialize the encoders
-        shooterEncoder = shooter.getEncoder(); 
-        shooterIntakeEncoder = shooterIntake.getEncoder(); 
+        shooterLeftEncoder = shooterLeft.getEncoder(); 
+        shooterRightEncoder = shooterRight.getEncoder(); 
 
         // Initialize the Closed loop controllers
-        shooterController = shooter.getClosedLoopController();
-        shooterIntakeController = shooterIntake.getClosedLoopController();
-
-        // Initialize the tree maps
+        shooterLeftController = shooterLeft.getClosedLoopController();
+        shooterRightController = shooterRight.getClosedLoopController();
 
         // Configure the Motors        
         indxrConfig.closedLoop.outputRange(ShooterIntakeConstants.INDXR_MIN_SPEED, ShooterIntakeConstants.INDXR_MAX_SPEED);
         groundIntakeConfig.closedLoop.outputRange(ShooterIntakeConstants.GROUND_MIN_SPEED, ShooterIntakeConstants.GROUND_MAX_SPEED);
+        intakeFlapConfig.closedLoop.outputRange(ShooterIntakeConstants.INTAKEFLAPS_MIN_SPEED, ShooterIntakeConstants.INTAKEFLAPS_MAX_SPEED);
         
-        shooterConfig.closedLoop
+        shooterRightConfig.follow(shooterLeft, true);
+
+        shooterLeftConfig.closedLoop
         .outputRange(ShooterIntakeConstants.SHOOTER_MIN_SPEED, ShooterIntakeConstants.SHOOTER_MAX_SPEED)
         .pid(ShooterIntakeConstants.shooterPID.kP, ShooterIntakeConstants.shooterPID.kI, ShooterIntakeConstants.shooterPID.kD)
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)      .feedForward
-          // kV is now in Volts, so we multiply by the nominal voltage (12V)
-          .kV(.0021);
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)      
+        .feedForward
+        .kV(.0021);
         
-        shooterIntakeConfig.closedLoop
-        .outputRange(ShooterIntakeConstants.SHOOTER_MIN_SPEED, ShooterIntakeConstants.SHOOTER_MAX_SPEED)
-        .pid(ShooterIntakeConstants.shooterIntakePID.kP, ShooterIntakeConstants.shooterIntakePID.kI, ShooterIntakeConstants.shooterIntakePID.kD)
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)        .feedForward
-          // kV is now in Volts, so we multiply by the nominal voltage (12V)
-          .kV(.0022);
-
-        shooterConfig.closedLoop.maxMotion
-        // Set MAXMotion parameters for position control. We don't need to pass
-        // a closed loop slot, as it will default to slot 0.
+        shooterLeftConfig.closedLoop.maxMotion
         .cruiseVelocity(1000)
         .maxAcceleration(4000)
-        .allowedProfileError(0.5)
-        // Set MAXMotion parameters for velocity control in slot 1
-        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-        .cruiseVelocity(6000, ClosedLoopSlot.kSlot1)
-        .allowedProfileError(1, ClosedLoopSlot.kSlot1);
-
-        shooterIntakeConfig.closedLoop.maxMotion
-        // Set MAXMotion parameters for position control. We don't need to pass
-        // a closed loop slot, as it will default to slot 0.
-        .cruiseVelocity(1000)
-        .maxAcceleration(4000)
-        .allowedProfileError(.5)
-        // Set MAXMotion parameters for velocity control in slot 1
-        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-        .cruiseVelocity(6000, ClosedLoopSlot.kSlot1)
-        .allowedProfileError(1, ClosedLoopSlot.kSlot1);
+        .allowedProfileError(0.5);
+        
         // Apply the configurations
-        shooter.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        shooterIntake.configure(shooterIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        shooterLeft.configure(shooterLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        shooterRight.configure(shooterRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         indxr.configure(indxrConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         groundIntake.configure(groundIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        intakeFlap.configure(intakeFlapConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         // Initialzing the widgets
-        SmartDashboard.setDefaultNumber("Shooter Speed", 0);
-        SmartDashboard.setDefaultNumber("ShooterIntake Speed", 0);
-        SmartDashboard.setDefaultNumber("ShooterIntake RPM", 0);
-        SmartDashboard.setDefaultNumber("y setpoint", 0); 
-    
+        SmartDashboard.setDefaultNumber("Shooters Speed", 0);
+        SmartDashboard.setDefaultNumber("Intake Flaps Speed", 0);
 
     }
 
     @Override
     public void periodic() {
-        // groundIntake.set(SmartDashboard.getNumber("GroundIntake Speed", 0));
-        // indxr.set(SmartDashboard.getNumber("Indxr Speed", 0));
-        // shooterIntake.set(SmartDashboard.getNumber("ShooterIntake Speed", 0));
-        // shooter.set(SmartDashboard.getNumber("Shooter Speed", 0));
-        // SmartDashboard.putNumber("Actual Position", shooterEncoder.getPosition());
-        SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
-        SmartDashboard.putNumber("Shooter Intake Velocity", shooterIntakeEncoder.getVelocity());
-        ysetpoint = SmartDashboard.getNumber(" y setpoint", 0);
-        // SmartDashboard.putNumber("cONV")
-
+        SmartDashboard.putNumber("Shooters RPM", shooterRightEncoder.getVelocity());
     }   
-
-    public double getYsetpoint(){
-        return ysetpoint;
-    }
 
 
     public Command stopIndxr() { 
         return runOnce(() -> indxr.set(0));
     }
 
-    public Command stopShooterIntake() { 
-        return runOnce(() -> shooterIntake.set(0));
-    }
 
     public Command stopGroundIntake() { 
         return runOnce(() -> groundIntake.set(0));
     }
 
     public Command stopShooter() { 
-        return runOnce(() -> shooter.set(0));
+        return runOnce(() -> shooterLeft.set(0));
     }
 
-    // printing out the speeds of the motors to elastic
+    public Command stopIntakeFlaps() { 
+        return runOnce(() -> intakeFlap.set(0));
+    }
+
     public Command testShooter(){
         return run(()-> {
-            shooterController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
-        
+            shooterLeftController.setSetpoint(SmartDashboard.getNumber("Shooter Speed", 0), ControlType.kMAXMotionVelocityControl);
         }); 
     }
 
-    public Command testShooterIntake(){
-        return run(()-> shooterIntakeController.setSetpoint(-SmartDashboard.getNumber("ShooterIntake Speed", 0), ControlType.kMAXMotionVelocityControl));
-
+    public Command testIntakeFlaps(){
+        return run(()-> intakeFlap.set(SmartDashboard.getNumber("Intake Flaps Speed", 0)));
     }
 
     public Command startIntakeCycle(){
         return run(()->{
-            shooterIntake.set(-0.5);
+            intakeFlap.set(0.5);
             indxr.set(-0.4);
             groundIntake.set(-0.5);
         });
-
     }
 
-    public Command shootCycle(Supplier<Double> shooterIntakeDist, Supplier<Double> shooterDist){
-
-
+    public Command stopIntakeCycle(){
         return run(()->{
-            shooterIntakeController.setSetpoint(-shooterIntakeDist.get(), ControlType.kMAXMotionVelocityControl); 
-            shooterController.setSetpoint(shooterDist.get(), ControlType.kMAXMotionVelocityControl);
+            intakeFlap.set(0);
+            indxr.set(0);
+            groundIntake.set(0);
         });
     }
 
-    public void startIndxr() {
+    public Command shootCycle(Supplier<Double> shooterLeftDist){
+        return run(()->{
+            shooterLeftController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl);
+        });
+    }
+
+    public Command startFeedShooter() {
+        return run(() ->{
             indxr.set(0.6);
+            intakeFlap.set(0.5);
+        });
     }
 
     public Command ejectFuel(){
         return run(() ->{ 
-            shooterIntake.set(0.5);
+            intakeFlap.set(-0.5);
             indxr.set(0.4);
 
         });
@@ -203,10 +169,28 @@ public class Shooter extends SubsystemBase {
 
     public Command stopCycles(){
         return run(()->{
-            shooterIntake.stopMotor();
-            shooter.stopMotor();
+            shooterLeft.stopMotor();
+            intakeFlap.stopMotor();
             indxr.stopMotor();
             groundIntake.stopMotor();
         });
+    }
+    
+    public void setRPM(Supplier<Double> rpm){
+        shooterLeftController.setSetpoint(rpm.get(), ControlType.kMAXMotionVelocityControl); 
+    }
+
+    public double getShooterRPM() {
+        return shooterRightEncoder.getVelocity(); 
+    }
+
+    public void feedFuel() { 
+        indxr.set(0.6);
+        intakeFlap.set(0.5);
+    }
+    
+    public void stopFeed() { 
+        indxr.set(0);
+        intakeFlap.set(0);
     }
 }

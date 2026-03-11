@@ -6,9 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.config.PIDConstants;
 
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import swervelib.math.Matter;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -24,47 +22,35 @@ import swervelib.math.Matter;
  */
 public final class Constants {
 
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   public static final double MAX_SPEED = Units.feetToMeters(14.5);
-  // Maximum speed of the robot in meters per second, used to limit acceleration.
 
   public static final class DrivebaseConstants {
-
-    // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
-  }
-
-  public static class OperatorConstants {
-
-    // Joystick Deadband
-    public static final double DEADBAND = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT = 6;
   }
 
   public static class ShooterIntakeConstants { 
     // IDS
-    public static final int ShooterIntakeID = 11; 
-    public static final int ShooterID = 10; 
+    public static final int ShooterRightID = 11; 
+    public static final int ShooterLeftID = 10; 
     public static final int GroundIntakeID = 13;
     public static final int IndxrID = 12; 
+    public static final int IntakeFlapsID = 14; 
 
     // MIN SPEEDS
     public static final double SHOOTER_MIN_SPEED = -1; 
     public static final double INDXR_MIN_SPEED = -1; 
     public static final double GROUND_MIN_SPEED = -1; 
+    public static final double INTAKEFLAPS_MIN_SPEED = -1; 
 
     // MAX SPEEDS
     public static final double SHOOTER_MAX_SPEED = 0.9; 
     public static final double INDXR_MAX_SPEED = 0.9; 
     public static final double GROUND_MAX_SPEED = 0.9; 
+    public static final double INTAKEFLAPS_MAX_SPEED = 0.9; 
+
 
     // PID
     public static final PIDConstants shooterPID = new PIDConstants(0.00015, 0.0, 0.0); 
-    public static final PIDConstants shooterIntakePID = new PIDConstants(0.00028, 0.0, 0.0); 
     
   }
 
