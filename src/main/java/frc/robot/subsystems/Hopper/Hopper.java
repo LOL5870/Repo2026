@@ -3,7 +3,9 @@ package frc.robot.subsystems.hopper;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HopperConstants;
 
@@ -21,6 +23,9 @@ public class Hopper extends SubsystemBase{
 
         followMotor.setInverted(true);
         leaderMotor.addFollower(followMotor);
+
+        SmartDashboard.setDefaultNumber("Hopper Speed", 0); 
+        SmartDashboard.setDefaultNumber("Hopper Timeout", 0); 
     }
 
 
@@ -32,8 +37,22 @@ public class Hopper extends SubsystemBase{
     public Command hopperOut(Supplier<Double> speed){
         return run(()-> leaderMotor.set(-speed.get()));
     }
+
+    public Command oscillateHopper() { 
+        System.out.println("HOPPER CYCLE STARTING");
+        return new SequentialCommandGroup(
+            hopperIn(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(SmartDashboard.getNumber("Hopper Timeout", 0)),
+            hopperOut(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(SmartDashboard.getNumber("Hopper Timeout", 0))
+        );
+    }
     
     public Command stopHopper(){
         return run((()-> leaderMotor.stopMotor()));
+    }
+
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Actual Hopper Speed", leaderMotor.get());
     }
 }

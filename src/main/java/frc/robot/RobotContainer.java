@@ -88,6 +88,7 @@ public class RobotContainer {
     driverXbox.axisGreaterThan(3, .1).whileTrue(hopper.hopperIn(() -> driverXbox.getRightTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.axisGreaterThan(2, .1).whileTrue(hopper.hopperOut(()-> driverXbox.getLeftTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox));
+    // driverXbox.b().whileTrue(hopper.oscillateHopper()); 
    
     // Operator Controllers
     // opXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
@@ -98,7 +99,6 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    
     return new SequentialCommandGroup(
         AutoBuilder.buildAuto("BackShootAuto")
     );
