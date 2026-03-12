@@ -164,7 +164,8 @@ public class Shooter extends SubsystemBase {
 
     public Command shootCycle(Supplier<Double> shooterLeftDist){
         return run(()->{
-            shooterLeftController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl);
+        shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
+        shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
         });
     }
 
@@ -178,7 +179,7 @@ public class Shooter extends SubsystemBase {
     public Command ejectFuel(){
         return run(() ->{ 
             intakeFlap.set(0.5);
-            indxr.set(0.4);
+            indxr.set(0.5);
 
         });
     }
@@ -186,8 +187,7 @@ public class Shooter extends SubsystemBase {
     public Command stopCycles(){
         return run(()->{
             shooterLeft.stopMotor();
-                        shooterRight.stopMotor();
-
+            shooterRight.stopMotor();
             intakeFlap.stopMotor();
             indxr.stopMotor();
             groundIntake.stopMotor();

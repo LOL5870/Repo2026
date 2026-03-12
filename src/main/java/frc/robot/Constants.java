@@ -87,7 +87,7 @@ public final class Constants {
   public static class AprilTagIDs {
     
     // Apple tags
-    public static final int[] RED_HUB_APRIL_TAGS = {11, 0, 8};
+    public static final int[] RED_HUB_APRIL_TAGS = {2, 10, 5};
     public static final int[] BLUE_HUB_APRIL_TAGS = {27, 26, 24};
 
   }

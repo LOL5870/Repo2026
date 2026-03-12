@@ -21,6 +21,9 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
+
+import javax.naming.Name;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
@@ -53,18 +56,23 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3500.0); 
-    shooterTreeMap.put(0.765, 3550.0); 
+    shooterTreeMap.put(0.965, 3475.0); 
+    shooterTreeMap.put(0.765, 3525.0); 
     shooterTreeMap.put(0.545, 3675.0);
     shooterTreeMap.put(0.375, 3825.0); 
-    shooterTreeMap.put(0.315, 3900.0); 
-    shooterTreeMap.put(0.235, 4050.0); 
+    shooterTreeMap.put(0.315, 3850.0); 
+    shooterTreeMap.put(0.235, 4000.0); 
 
-    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(8));
+    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(5));
     NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(7));
     NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox));
+    NamedCommands.registerCommand("stopCycles", shooter.stopCycles());
+    NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
+    NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper()
+     );
+    //NamedCommands.registerCommand("extendHopper", new Hopper().oscillateHopper());
     
-    new EventTrigger("runIntake").whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle());
+    // new EventTrigger("runIntake").whileTrue(shooter.startIntakeCycle());
 
     
     
@@ -88,21 +96,25 @@ public class RobotContainer {
     driverXbox.axisGreaterThan(3, .1).whileTrue(hopper.hopperIn(() -> driverXbox.getRightTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.axisGreaterThan(2, .1).whileTrue(hopper.hopperOut(()-> driverXbox.getLeftTriggerAxis())).onFalse(hopper.stopHopper());
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox));
-    driverXbox.b().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
+    // driverXbox.b().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
     driverXbox.x().whileTrue(shooter.startFeedShooter()).onFalse(new InstantCommand(() -> shooter.stopFeed()));
-    // driverXbox.b().whileTrue(hopper.oscillateHopper()); 
-   
+    driverXbox.povUp().whileTrue(new SequentialCommandGroup(
+      hopper.oscillationPrep(),
+      hopper.oscillateHopper().repeatedly().withTimeout(5)
+    ).repeatedly()).onFalse(hopper.stopHopper()); 
+    driverXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
+    driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle());
+    driverXbox.povDown().whileTrue(new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter)).onFalse(shooter.stopCycles());
     // Operator Controllers
     // opXbox.leftBumper().whileTrue(shooter.testShooterIntake()).onFalse(shooter.stopShooterIntake());
     // opXbox.rightBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopCycles());
 
-
-  }
+     }
 
 
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-        AutoBuilder.buildAuto("BackShootAuto")
+        AutoBuilder.buildAuto("side")
     );
 
   }

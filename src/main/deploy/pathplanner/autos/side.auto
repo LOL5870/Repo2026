@@ -1,0 +1,94 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New New New Path"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootCycleMiddle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "oscillateHopper"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New New Path"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootCycle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "oscillateHopper"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

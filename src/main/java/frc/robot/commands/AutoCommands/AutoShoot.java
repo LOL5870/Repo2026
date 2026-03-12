@@ -2,6 +2,7 @@ package frc.robot.commands.AutoCommands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 
@@ -25,8 +26,9 @@ public class AutoShoot extends Command{
     @Override
     public void execute() {
         shooter.setRPM(shooterRPM.get());
-
-        if(shooter.getShooterRPM() > shooterRPM.get() - 300 && !rpmReached) { 
+        SmartDashboard.putNumber("blah", shooter.getShooterRPM());   
+        if(-shooter.getShooterRPM() > shooterRPM.get() - 300 && !rpmReached) { 
+            System.out.println("ASKDJLASJD");
             rpmReached = true;
         }
 

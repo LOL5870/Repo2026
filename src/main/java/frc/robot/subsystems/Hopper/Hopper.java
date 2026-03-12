@@ -46,9 +46,14 @@ public class Hopper extends SubsystemBase{
     public Command oscillateHopper() { 
         System.out.println("HOPPER CYCLE STARTING");
         return new SequentialCommandGroup(
-            hopperIn(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(SmartDashboard.getNumber("Hopper Timeout", 0)),
-            hopperOut(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(SmartDashboard.getNumber("Hopper Timeout", 0))
+            hopperIn(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(.1),
+            hopperOut(() -> SmartDashboard.getNumber("Hopper Speed", 0)).withTimeout(.1)
         );
+    }
+
+    public Command oscillationPrep(){
+        return hopperOut(() -> 0.4).withTimeout(1.25); 
+
     }
     
     public Command stopHopper(){
