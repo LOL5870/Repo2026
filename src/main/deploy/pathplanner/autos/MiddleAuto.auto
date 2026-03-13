@@ -5,59 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "New New New Path"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "hubAlign"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shootCycleMiddle"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New Path"
+                  "pathName": "MoveBackMiddle"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntake"
+                  "name": "extendHopper"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "New New Path"
-          }
-        },
-        {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootCycleMiddle"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -67,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shootCycle"
+                  "name": "oscillateHopper"
                 }
               }
             ]

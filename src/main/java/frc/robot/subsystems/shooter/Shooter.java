@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterIntakeConstants;
+import frc.robot.subsystems.hopper.Hopper;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Shooter extends SubsystemBase {
@@ -111,8 +112,6 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter RIGHT RPM", -shooterRightEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter LEFT RPM", shooterLeftEncoder.getVelocity());
-
-        SmartDashboard.putNumber("Shooter RPM value needed", 3000);
     }   
 
 
@@ -211,6 +210,18 @@ public class Shooter extends SubsystemBase {
     public void stopFeed() { 
         indxr.stopMotor();
         intakeFlap.stopMotor();
+    }
+
+    public Command stopEverything(Hopper hopper) { 
+        return runOnce(() -> {
+            hopper.stopHopper(); 
+            indxr.stopMotor();
+            intakeFlap.stopMotor();
+            groundIntake.stopMotor();
+            shooterLeft.stopMotor();
+            shooterRight.stopMotor();
+        } 
+        ); 
     }
     
 }
