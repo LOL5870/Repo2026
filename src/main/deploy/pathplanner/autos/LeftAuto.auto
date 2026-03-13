@@ -5,22 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "extendHopper"
-                }
-              }
-            ]
+            "pathName": "Left1"
           }
         },
         {
@@ -81,12 +68,6 @@
                 "type": "named",
                 "data": {
                   "name": "hubAlign"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "oscillateHopper"
                 }
               }
             ]

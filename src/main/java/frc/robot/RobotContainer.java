@@ -66,6 +66,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
+    NamedCommands.registerCommand("extendHopper", hopper.hopperExtend());
     
     
     // Configure Bindings

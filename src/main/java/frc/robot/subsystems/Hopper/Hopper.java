@@ -76,7 +76,7 @@ public class Hopper extends SubsystemBase{
     }
     
     public Command hopperExtend(){
-        return hopperOut(() -> 0.4).withTimeout(1.25); 
+        return hopperOut(() -> 0.4).withTimeout(1.75); 
     }
 
     public Command stopHopper(){
