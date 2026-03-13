@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
@@ -20,6 +19,7 @@ import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
+import frc.robot.subsystems.vision.PhotonVision;
 import swervelib.SwerveInputStream;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder; 
@@ -48,6 +48,7 @@ public class RobotContainer {
     Shooter shooter = new Shooter(); 
     Align align = new Align(swerveSubsystem);
     Hopper hopper = new Hopper();
+    PhotonVision vision = new PhotonVision("photonvision");
   
 
   public RobotContainer() {
@@ -60,12 +61,13 @@ public class RobotContainer {
     shooterTreeMap.put(0.315, 3850.0); 
     shooterTreeMap.put(0.235, 4000.0); 
 
-    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(5));
-    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(7));
+    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter, vision).withTimeout(5));
+    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter, vision).withTimeout(7));
     NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox));
     NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
+    NamedCommands.registerCommand("hopperCheck", new PhotonVision("photonvision").checkHopper());
     
     
     // Configure Bindings
