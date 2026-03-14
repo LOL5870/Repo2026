@@ -2,8 +2,8 @@ package frc.robot.commands.AutoCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -35,12 +35,10 @@ public class HubAlign extends Command{
 
     @Override
     public void initialize() {
-        // if(DriverStation.getAlliance().get() == Alliance.Red)
-        //     tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
-        // else
-        //     tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
-
-        tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
+        if(DriverStation.getAlliance().get() == Alliance.Red)
+            tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
+        else
+            tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
     }
 
     @Override
@@ -50,22 +48,22 @@ public class HubAlign extends Command{
         if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
             xTarget = 0;
         }
-        // Left
-        else if(!findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-            xTarget = AutoConstants.xOffsetSide;
-        }
-        // Right
-        else if(!findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
-            xTarget = -AutoConstants.xOffsetSide;
-        }
-        // Middle-Left
-        else if(findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-            xTarget = AutoConstants.xOffsetCorner;
-        }
-        // Middle-right
-        else if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
-            xTarget = -AutoConstants.xOffsetCorner;
-        }
+        // // Left
+        // else if(!findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
+        //     xTarget = AutoConstants.xOffsetSide;
+        // }
+        // // Right
+        // else if(!findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
+        //     xTarget = -AutoConstants.xOffsetSide;
+        // }
+        // // Middle-Left
+        // else if(findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
+        //     xTarget = AutoConstants.xOffsetCorner;
+        // }
+        // // Middle-right
+        // else if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
+        //     xTarget = -AutoConstants.xOffsetCorner;
+        // }
 
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
 

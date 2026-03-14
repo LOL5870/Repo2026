@@ -125,9 +125,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command stopShooter() { 
-        return runOnce(() ->{ shooterLeft.stopMotor(); 
-            shooterRight.stopMotor();});
-
+        return runOnce(() ->{
+            
+            shooterLeft.stopMotor(); 
+            shooterRight.stopMotor();
+        });
     }
 
     public Command stopIntakeFlaps() { 
@@ -175,6 +177,23 @@ public class Shooter extends SubsystemBase {
         });
     }
 
+    public Command startFeedFuel(){
+        return run(() -> {
+            indxr.set(0.6);
+            intakeFlap.set(-0.5);
+
+        });
+    }
+
+    public Command stopFeedFuel(){
+        return run(() -> {
+            indxr.stopMotor();
+            intakeFlap.stopMotor();
+
+        });
+    }
+
+
     public Command ejectFuel(){
         return run(() ->{ 
             intakeFlap.set(0.5);
@@ -191,6 +210,15 @@ public class Shooter extends SubsystemBase {
             indxr.stopMotor();
             groundIntake.stopMotor();
         });
+    }
+
+    public Command fixedRPM(double rpm){
+        return run(()->{
+            shooterLeftController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl); 
+            shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl); 
+
+        });
+
     }
     
     public void setRPM(double rpm){

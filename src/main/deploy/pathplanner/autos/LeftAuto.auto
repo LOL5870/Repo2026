@@ -51,7 +51,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left3"
+            "pathName": "autopath2mid3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "left3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "extendHopper"
+                }
+              }
+            ]
           }
         },
         {
@@ -61,13 +80,19 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shootCycleMiddle"
+                  "name": "shootCycle"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "hubAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "oscillateHopper"
                 }
               }
             ]

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
@@ -59,12 +58,12 @@ public class RobotContainer {
     // Shooter tree map
     shooterTreeMap.put(0.965, 3475.0); 
     shooterTreeMap.put(0.765, 3525.0); 
-    shooterTreeMap.put(0.545, 3675.0);
-    shooterTreeMap.put(0.375, 3825.0); 
-    shooterTreeMap.put(0.315, 3850.0); 
-    shooterTreeMap.put(0.235, 4000.0); 
+    shooterTreeMap.put(0.545, 3625.0);
+    shooterTreeMap.put(0.375, 3800.0); 
+    shooterTreeMap.put(0.315, 3800.0); 
+    shooterTreeMap.put(0.235, 3900.0); 
 
-    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(5));
+    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3));
     NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(7));
     NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
@@ -80,6 +79,7 @@ public class RobotContainer {
     sendableChooser.addOption("Left Auto", AutoBuilder.buildAuto("LeftAuto"));
     sendableChooser.addOption("Right Auto", AutoBuilder.buildAuto("RightAuto"));
     sendableChooser.addOption("middle Auto", AutoBuilder.buildAuto("MiddleAuto"));
+    //sendableChooser.addOption("Left Over Auto", AutoBuilder.buildAuto("OverTrenchLeft"));
 
     SmartDashboard.putData("Auto chooser", sendableChooser);
 
@@ -99,16 +99,18 @@ public class RobotContainer {
     driverXbox.leftBumper().whileTrue(new SequentialCommandGroup( // jorker 5000
       hopper.oscillationPrep(),
       hopper.oscillateHopper().repeatedly().withTimeout(5)
-    ).repeatedly()).onFalse(hopper.stopHopper()); 
+    )).onFalse(hopper.stopHopper()); 
 
 
-    opXbox.leftBumper().whileTrue(new ShootCycle(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), () -> driverXbox.rightBumper().getAsBoolean(), shooter)).onFalse(shooter.stopCycles());
+    opXbox.leftBumper().whileTrue(new ShootCycle(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), () -> opXbox.rightBumper().getAsBoolean(), shooter)).onFalse(shooter.stopCycles());
     opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
     opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
     opXbox.axisGreaterThan(1, 0.1).whileTrue(hopper.spinLeftMotor(() -> -opXbox.getRawAxis(1))).onFalse(hopper.stopLeftMotor()); 
     opXbox.axisGreaterThan(5, 0.1).whileTrue(hopper.spinRightMotor(() -> -opXbox.getRawAxis(5))).onFalse(hopper.stopRightMotor());
-    driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    driverXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
+    opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
+    opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
+    opXbox.povUp().whileTrue(shooter.fixedRPM(3800)).onFalse(shooter.stopShooter());
+    opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
   }
 
 

@@ -28,6 +28,7 @@ public class ShootCycle extends Command{
         shooter.setRPM(shooterRPM.get());
         if(isFeed.get()){
             shooter.feedFuel();
+            System.out.println("ASDSAD");
         }
         else{
             shooter.stopFeed();

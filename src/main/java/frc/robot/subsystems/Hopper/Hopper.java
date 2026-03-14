@@ -29,8 +29,8 @@ public class Hopper extends SubsystemBase{
     public Command hopperOut(Supplier<Double> speed){
         System.out.println(speed.get());
         return run(()-> {
-            leaderMotor.set(speed.get()*1.2);
-            followMotor.set(speed.get());
+            leaderMotor.set(speed.get());
+            followMotor.set(speed.get()*1.1);
 
         });
     }
@@ -49,8 +49,8 @@ public class Hopper extends SubsystemBase{
 
     public Command hopperIn(Supplier<Double> speed){
         return run(()-> {
-            leaderMotor.set(-speed.get()*1.2);
-            followMotor.set(-speed.get());
+            leaderMotor.set(-speed.get());
+            followMotor.set(-speed.get()*1.2);
 
         });
     }
@@ -72,7 +72,7 @@ public class Hopper extends SubsystemBase{
     }
 
     public Command oscillationPrep(){
-        return hopperIn(() -> 0.4).withTimeout(1.25); 
+        return hopperIn(() -> 0.4).withTimeout(.75); 
     }
     
     public Command hopperExtend(){
