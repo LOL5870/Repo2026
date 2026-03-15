@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
 import frc.robot.commands.AutoCommands.AutoShoot;
 import frc.robot.commands.AutoCommands.HubAlign;
+import frc.robot.commands.AutoCommands.HubAlignAuto;
 import frc.robot.commands.ShooterCommands.ShootCycle;
 import frc.robot.commands.ShooterCommands.ShooterCycleMan;
 import frc.robot.subsystems.hopper.Hopper;
@@ -41,8 +42,8 @@ public class RobotContainer {
   private SendableChooser<Command> sendableChooser = new SendableChooser<>();
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-      () -> driverXbox.getLeftY() * 1,
-      () -> driverXbox.getLeftX() * 1)
+      () -> driverXbox.getLeftY() * -1,
+      () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(driverXbox::getRightX)
       .deadband(0.1)
       .scaleTranslation(.60)
@@ -57,16 +58,16 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3450.0); 
-    shooterTreeMap.put(0.765, 3525.0); 
-    shooterTreeMap.put(0.545, 3625.0);
+    shooterTreeMap.put(0.965, 3425.0); 
+    shooterTreeMap.put(0.765, 3495.0); 
+    shooterTreeMap.put(0.545, 3590.0);
     shooterTreeMap.put(0.375, 3800.0); 
-    shooterTreeMap.put(0.315, 3900.0); 
-    shooterTreeMap.put(0.235, 4000.0); 
+    shooterTreeMap.put(0.315, 4000.0); 
+    shooterTreeMap.put(0.235, 4100.0); 
 
     NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
     NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5));
-    NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox, () -> false));
+    NamedCommands.registerCommand("hubAlign", new HubAlignAuto(swerveSubsystem, driverXbox));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());

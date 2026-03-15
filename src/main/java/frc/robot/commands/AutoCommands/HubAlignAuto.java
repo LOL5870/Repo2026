@@ -17,23 +17,19 @@ import frc.robot.Constants.TAGS;
 import frc.robot.Constants.AprilTagIDs;
 
 
-public class HubAlign extends Command{
+public class HubAlignAuto extends Command{
     
     private SwerveSubsystem swerveSubsystem; 
     private PIDController rotController; 
     private double xTarget;
     private CommandXboxController controller;
     private int[] tagIDs;
-    private Supplier<Boolean> isOscillate; 
-    private double xSpeed; 
-    private boolean isSet; 
     
 
-    public HubAlign(SwerveSubsystem subsystem, CommandXboxController controller, Supplier<Boolean> isOscillate) {
+    public HubAlignAuto(SwerveSubsystem subsystem, CommandXboxController controller) {
 
         this.swerveSubsystem = subsystem;
         this.controller = controller;
-        this.isOscillate = isOscillate; 
         rotController = new PIDController(AutoConstants.HUB_ALIGN_PID.kP, AutoConstants.HUB_ALIGN_PID.kI, AutoConstants.HUB_ALIGN_PID.kD);
         addRequirements(swerveSubsystem);
     }
@@ -46,7 +42,6 @@ public class HubAlign extends Command{
         else
             tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
 
-        xSpeed = 0; 
     }
 
     @Override
@@ -59,24 +54,13 @@ public class HubAlign extends Command{
 
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
 
-        if(isOscillate.get() && !isSet) { 
-            xSpeed = 0.5;
-            isSet = true; 
-        }
-        else { 
-            xSpeed = -controller.getLeftX(); 
-            isSet = false; 
-        }
-
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), xSpeed, rot, swerveSubsystem.getHeading());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), -controller.getLeftX(), rot, swerveSubsystem.getHeading());
         swerveSubsystem.setChassisSpeeds(chassisSpeeds);
-
-        xSpeed *= -1; 
     }
 
     @Override
     public void end(boolean interrupted) {
-        swerveSubsystem.drive(new Translation2d(), 0, false);
+
     }
 
     @Override
