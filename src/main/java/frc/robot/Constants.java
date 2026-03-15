@@ -66,9 +66,10 @@ public final class Constants {
   public static class AutoConstants{
     // PID
     public static final PIDConstants HUB_ALIGN_PID = new PIDConstants(0.08, 0,0);
+    public static final PIDConstants HUB_ALIGN_PID_TELE = new PIDConstants(0.08, 0,0);
     
     // x Offset for hub
-    public static final double xOffsetSide = 1; 
+    public static final double xOffsetSide = 1;
     public static final double xOffsetCorner = 1; 
   }
 

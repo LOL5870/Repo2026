@@ -165,8 +165,8 @@ public class Shooter extends SubsystemBase {
 
     public Command shootCycle(Supplier<Double> shooterLeftDist){
         return run(()->{
-        shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
-        shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
+            shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
+            shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
         });
     }
 
@@ -215,8 +215,7 @@ public class Shooter extends SubsystemBase {
     public Command fixedRPM(double rpm){
         return run(()->{
             shooterLeftController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl); 
-            shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl); 
-
+            shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl);
         });
 
     }

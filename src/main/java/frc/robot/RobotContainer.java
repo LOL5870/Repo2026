@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
 import frc.robot.commands.AutoCommands.AutoShoot;
 import frc.robot.commands.AutoCommands.HubAlign;
+import frc.robot.commands.AutoCommands.HubAlignTele;
 import frc.robot.commands.ShooterCommands.ShootCycle;
+import frc.robot.commands.ShooterCommands.ShooterCycleMan;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -40,8 +42,8 @@ public class RobotContainer {
   private SendableChooser<Command> sendableChooser = new SendableChooser<>();
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-      () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX() * -1)
+      () -> driverXbox.getLeftY() * 1,
+      () -> driverXbox.getLeftX() * 1)
       .withControllerRotationAxis(driverXbox::getRightX)
       .deadband(0.1)
       .scaleTranslation(.60)
@@ -56,15 +58,15 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3475.0); 
+    shooterTreeMap.put(0.965, 3450.0); 
     shooterTreeMap.put(0.765, 3525.0); 
     shooterTreeMap.put(0.545, 3625.0);
     shooterTreeMap.put(0.375, 3800.0); 
-    shooterTreeMap.put(0.315, 3800.0); 
-    shooterTreeMap.put(0.235, 3900.0); 
+    shooterTreeMap.put(0.315, 3900.0); 
+    shooterTreeMap.put(0.235, 4000.0); 
 
-    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3));
-    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(7));
+    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
+    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5));
     NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
@@ -80,6 +82,8 @@ public class RobotContainer {
     sendableChooser.addOption("Right Auto", AutoBuilder.buildAuto("RightAuto"));
     sendableChooser.addOption("middle Auto", AutoBuilder.buildAuto("MiddleAuto"));
     //sendableChooser.addOption("Left Over Auto", AutoBuilder.buildAuto("OverTrenchLeft"));
+    sendableChooser.addOption("Left with depot Auto", AutoBuilder.buildAuto("LeftAutoWdepot"));
+    sendableChooser.addOption("middle basic Auto", AutoBuilder.buildAuto("BasicMiddleAuto"));
 
     SmartDashboard.putData("Auto chooser", sendableChooser);
 
@@ -95,22 +99,28 @@ public class RobotContainer {
     // Setup Controls
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox));
-    driverXbox.leftBumper().whileTrue(new SequentialCommandGroup( // jorker 5000
-      hopper.oscillationPrep(),
-      hopper.oscillateHopper().repeatedly().withTimeout(5)
-    )).onFalse(hopper.stopHopper()); 
+    driverXbox.rightBumper().whileTrue(new HubAlignTele(swerveSubsystem, driverXbox));// jiggle test
+    driverXbox.x().whileTrue(new HubAlign(swerveSubsystem, driverXbox)); // fail safe incase pid is too high
+    driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
+    driverXbox.povUp().whileTrue(hopper.hopperExtend()).onFalse(hopper.stopHopper());
 
 
-    opXbox.leftBumper().whileTrue(new ShootCycle(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), () -> opXbox.rightBumper().getAsBoolean(), shooter)).onFalse(shooter.stopCycles());
+    opXbox.leftBumper().whileTrue(
+      new ShootCycle(
+        () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
+        shooter, 
+        () -> opXbox.rightBumper().getAsBoolean()))
+        .onFalse(shooter.stopCycles()); // shoot when april tag and aligned
     opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
     opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
     opXbox.axisGreaterThan(1, 0.1).whileTrue(hopper.spinLeftMotor(() -> -opXbox.getRawAxis(1))).onFalse(hopper.stopLeftMotor()); 
     opXbox.axisGreaterThan(5, 0.1).whileTrue(hopper.spinRightMotor(() -> -opXbox.getRawAxis(5))).onFalse(hopper.stopRightMotor());
     opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
-    opXbox.povUp().whileTrue(shooter.fixedRPM(3800)).onFalse(shooter.stopShooter());
-    opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
+    opXbox.povUp().whileTrue(new ShooterCycleMan(shooter, 4500)).onFalse(shooter.stopCycles()); // shoot from anywhere
+    opXbox.povDown().whileTrue(new ShooterCycleMan(shooter, 3750)).onFalse(shooter.stopCycles());
+    //opXbox.povUp().whileTrue(shooter.fixedRPM(400)).onFalse(shooter.stopShooter());
+    // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
   }
 
 

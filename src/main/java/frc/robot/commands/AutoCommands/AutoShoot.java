@@ -38,11 +38,11 @@ public class AutoShoot extends Command{
     public void execute() {
 
         if(findID(tagIDs[Constants.TAGS.left.value]) || findID(tagIDs[Constants.TAGS.right.value]) || findID(tagIDs[Constants.TAGS.middle.value])){
-                shooter.setRPM(shooterRPM.get());
-                SmartDashboard.putNumber("blah", shooter.getShooterRPM());   
+                shooter.setRPM(shooterRPM.get());  
+
             if(-shooter.getShooterRPM() > shooterRPM.get() - 300 && !rpmReached) { 
-                System.out.println("ASKDJLASJD");
                 rpmReached = true;
+                
             }
 
             if(rpmReached)

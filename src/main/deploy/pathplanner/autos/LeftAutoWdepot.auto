@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right1"
+            "pathName": "Left1"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right2"
+                  "pathName": "Left2"
                 }
               },
               {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right4"
+            "pathName": "left3"
           }
         },
         {
@@ -61,7 +61,51 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shootCycleMiddle"
+                  "name": "shootCycle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubAlign"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "left 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left 5"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootCycle"
                 }
               },
               {
