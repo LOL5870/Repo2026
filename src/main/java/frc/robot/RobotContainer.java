@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
 import frc.robot.commands.AutoCommands.AutoShoot;
 import frc.robot.commands.AutoCommands.HubAlign;
-import frc.robot.commands.AutoCommands.HubAlignTele;
 import frc.robot.commands.ShooterCommands.ShootCycle;
 import frc.robot.commands.ShooterCommands.ShooterCycleMan;
 import frc.robot.subsystems.hopper.Hopper;
@@ -67,7 +66,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
     NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5));
-    NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox));
+    NamedCommands.registerCommand("hubAlign", new HubAlign(swerveSubsystem, driverXbox, () -> false));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
@@ -99,8 +98,7 @@ public class RobotContainer {
     // Setup Controls
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.rightBumper().whileTrue(new HubAlignTele(swerveSubsystem, driverXbox));// jiggle test
-    driverXbox.x().whileTrue(new HubAlign(swerveSubsystem, driverXbox)); // fail safe incase pid is too high
+    driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
     driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
     driverXbox.povUp().whileTrue(hopper.hopperExtend()).onFalse(hopper.stopHopper());
 

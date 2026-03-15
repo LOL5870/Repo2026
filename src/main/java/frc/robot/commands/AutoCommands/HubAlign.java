@@ -1,5 +1,7 @@
 package frc.robot.commands.AutoCommands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,13 +23,16 @@ public class HubAlign extends Command{
     private double xTarget;
     private CommandXboxController controller;
     private int[] tagIDs;
+    private Supplier<Boolean> isOscillate; 
+    private double xSpeed; 
+    private boolean isSet; 
     
 
-    public HubAlign(SwerveSubsystem subsystem, CommandXboxController controller) {
+    public HubAlign(SwerveSubsystem subsystem, CommandXboxController controller, Supplier<Boolean> isOscillate) {
 
         this.swerveSubsystem = subsystem;
         this.controller = controller;
-
+        this.isOscillate = isOscillate; 
         rotController = new PIDController(AutoConstants.HUB_ALIGN_PID.kP, AutoConstants.HUB_ALIGN_PID.kI, AutoConstants.HUB_ALIGN_PID.kD);
         addRequirements(swerveSubsystem);
     }
@@ -39,6 +44,8 @@ public class HubAlign extends Command{
             tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
         else
             tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
+
+        xSpeed = 0; 
     }
 
     @Override
@@ -48,27 +55,22 @@ public class HubAlign extends Command{
         if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
             xTarget = 0;
         }
-        // // Left
-        // else if(!findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-        //     xTarget = AutoConstants.xOffsetSide;
-        // }
-        // // Right
-        // else if(!findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
-        //     xTarget = -AutoConstants.xOffsetSide;
-        // }
-        // // Middle-Left
-        // else if(findID(tagIDs[TAGS.middle.value]) && findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-        //     xTarget = AutoConstants.xOffsetCorner;
-        // }
-        // // Middle-right
-        // else if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && findID(tagIDs[TAGS.right.value])){
-        //     xTarget = -AutoConstants.xOffsetCorner;
-        // }
 
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
 
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), -controller.getLeftX(), rot, swerveSubsystem.getHeading());
+        if(isOscillate.get() && !isSet) { 
+            xSpeed = 0.5;
+            isSet = true; 
+        }
+        else { 
+            xSpeed = -controller.getLeftX(); 
+            isSet = false; 
+        }
+
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), xSpeed, rot, swerveSubsystem.getHeading());
         swerveSubsystem.setChassisSpeeds(chassisSpeeds);
+
+        xSpeed *= -1; 
     }
 
     @Override
