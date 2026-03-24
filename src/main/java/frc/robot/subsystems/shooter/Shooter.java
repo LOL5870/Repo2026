@@ -76,11 +76,11 @@ public class Shooter extends SubsystemBase {
         .pid(ShooterIntakeConstants.shooterPID.kP, ShooterIntakeConstants.shooterPID.kI, ShooterIntakeConstants.shooterPID.kD)
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)      
         .feedForward
-        .kV(.0021);
+        .kV(.001865);
         
         shooterLeftConfig.closedLoop.maxMotion
         .cruiseVelocity(1000)
-        .maxAcceleration(4000)
+        .maxAcceleration(3500)
         .allowedProfileError(0.5);
 
         shooterRightConfig.closedLoop
@@ -88,11 +88,11 @@ public class Shooter extends SubsystemBase {
         .pid(ShooterIntakeConstants.shooter2PID.kP, ShooterIntakeConstants.shooter2PID.kI, ShooterIntakeConstants.shooter2PID.kD)
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)      
         .feedForward
-        .kV(.00212);
+        .kV(.001867);
         
         shooterRightConfig.closedLoop.maxMotion
         .cruiseVelocity(1000)
-        .maxAcceleration(4000)
+        .maxAcceleration(3500)
         .allowedProfileError(0.5);
         
         // Apply the configurations
@@ -112,6 +112,7 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter RIGHT RPM", -shooterRightEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter LEFT RPM", shooterLeftEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter SETPOINT", 3750); 
     }   
 
 

@@ -102,10 +102,14 @@ public class RobotContainer {
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
     driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
     driverXbox.povUp().whileTrue(hopper.hopperExtend()).onFalse(hopper.stopHopper());
-
+    driverXbox.b().whileTrue(hopper.testLmotor()).onFalse(hopper.stopLeftMotor());
+    driverXbox.x().whileTrue(hopper.testRmotor()).onFalse(hopper.stopRightMotor());
+    driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
+    driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
 
     opXbox.leftBumper().whileTrue(
       new ShootCycle(
+
         () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
         shooter, 
         () -> opXbox.rightBumper().getAsBoolean()))

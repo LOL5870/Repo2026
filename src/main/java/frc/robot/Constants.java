@@ -50,8 +50,8 @@ public final class Constants {
 
 
     // PID
-    public static final PIDConstants shooterPID = new PIDConstants(0.00015, 0.0, 0.0);
-    public static final PIDConstants shooter2PID = new PIDConstants(0.00009,0,0);
+    public static final PIDConstants shooterPID = new PIDConstants(0.00010, 0.0, 0.0);
+    public static final PIDConstants shooter2PID = new PIDConstants(0.000085,0,0);
     
   }
 

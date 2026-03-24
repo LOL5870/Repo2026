@@ -21,8 +21,8 @@ public class Hopper extends SubsystemBase{
         leaderMotor =  new VictorSP(HopperConstants.leftMotorID);
         followMotor =  new VictorSP(HopperConstants.rightMotorID);
 
-        SmartDashboard.setDefaultNumber("Hopper Speed", 0); 
-        SmartDashboard.setDefaultNumber("Hopper Timeout", 0); 
+        SmartDashboard.setDefaultNumber("Left Hopper Speed", 0); 
+        SmartDashboard.setDefaultNumber("Right Hopper Speed", 0); 
     }
 
 
@@ -85,7 +85,13 @@ public class Hopper extends SubsystemBase{
             followMotor.stopMotor();;
         });    }
 
+    public Command testLmotor(){
+       return run(()-> leaderMotor.set(SmartDashboard.getNumber("Left Hopper Speed", 0)));
+    }
 
+    public Command testRmotor(){
+        return run(()-> leaderMotor.set(SmartDashboard.getNumber("Right Hopper Speed", 0)));
+    }
         
     @Override
     public void periodic() {
