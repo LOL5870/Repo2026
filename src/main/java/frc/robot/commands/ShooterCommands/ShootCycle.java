@@ -2,14 +2,8 @@ package frc.robot.commands.ShooterCommands;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AprilTagIDs;
-import frc.robot.Constants.TAGS;
 import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.vision.LimelightHelpers;
-import frc.robot.subsystems.vision.LimelightHelpers.RawFiducial;
 
 public class ShootCycle extends Command{
 

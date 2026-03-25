@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.Align;
 import frc.robot.commands.AutoCommands.AutoShoot;
@@ -102,8 +101,7 @@ public class RobotContainer {
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
     driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
     driverXbox.povUp().whileTrue(hopper.hopperExtend()).onFalse(hopper.stopHopper());
-    driverXbox.b().whileTrue(hopper.testLmotor()).onFalse(hopper.stopLeftMotor());
-    driverXbox.x().whileTrue(hopper.testRmotor()).onFalse(hopper.stopRightMotor());
+    driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
     driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
 
@@ -116,14 +114,10 @@ public class RobotContainer {
         .onFalse(shooter.stopCycles()); // shoot when april tag and aligned
     opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
     opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
-    opXbox.axisGreaterThan(1, 0.1).whileTrue(hopper.spinLeftMotor(() -> -opXbox.getRawAxis(1))).onFalse(hopper.stopLeftMotor()); 
-    opXbox.axisGreaterThan(5, 0.1).whileTrue(hopper.spinRightMotor(() -> -opXbox.getRawAxis(5))).onFalse(hopper.stopRightMotor());
     opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
     opXbox.povUp().whileTrue(new ShooterCycleMan(shooter, 4500)).onFalse(shooter.stopCycles()); // shoot from anywhere
     opXbox.povDown().whileTrue(new ShooterCycleMan(shooter, 3750)).onFalse(shooter.stopCycles());
-    //opXbox.povUp().whileTrue(shooter.fixedRPM(400)).onFalse(shooter.stopShooter());
-    // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
   }
 
 

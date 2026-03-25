@@ -115,28 +115,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter SETPOINT", 3750); 
     }   
 
-
-    public Command stopIndxr() { 
-        return runOnce(() -> indxr.stopMotor());
-    }
-
-
-    public Command stopGroundIntake() { 
-        return runOnce(() -> groundIntake.stopMotor());
-    }
-
-    public Command stopShooter() { 
-        return runOnce(() ->{
-            
-            shooterLeft.stopMotor(); 
-            shooterRight.stopMotor();
-        });
-    }
-
-    public Command stopIntakeFlaps() { 
-        return runOnce(() -> intakeFlap.stopMotor());
-    }
-
     public Command testShooter(){
         return run(()-> {
             shooterLeftController.setSetpoint(SmartDashboard.getNumber("Shooters Speed", 0), ControlType.kMAXMotionVelocityControl);
@@ -144,23 +122,11 @@ public class Shooter extends SubsystemBase {
         }); 
     }
 
-    public Command testIntakeFlaps(){
-        return run(()-> intakeFlap.set(SmartDashboard.getNumber("Intake Flaps Speed", 0)));
-    }
-
     public Command startIntakeCycle(){
         return run(()->{
             intakeFlap.set(-0.5);
             indxr.set(-0.4);
             groundIntake.set(-0.5);
-        });
-    }
-
-    public Command stopIntakeCycle(){
-        return run(()->{
-            intakeFlap.stopMotor();
-            indxr.stopMotor();
-            groundIntake.stopMotor();
         });
     }
 
@@ -186,33 +152,6 @@ public class Shooter extends SubsystemBase {
         });
     }
 
-    public Command stopFeedFuel(){
-        return run(() -> {
-            indxr.stopMotor();
-            intakeFlap.stopMotor();
-
-        });
-    }
-
-
-    public Command ejectFuel(){
-        return run(() ->{ 
-            intakeFlap.set(0.5);
-            indxr.set(0.5);
-
-        });
-    }
-
-    public Command stopCycles(){
-        return run(()->{
-            shooterLeft.stopMotor();
-            shooterRight.stopMotor();
-            intakeFlap.stopMotor();
-            indxr.stopMotor();
-            groundIntake.stopMotor();
-        });
-    }
-
     public Command fixedRPM(double rpm){
         return run(()->{
             shooterLeftController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl); 
@@ -233,6 +172,60 @@ public class Shooter extends SubsystemBase {
     public void feedFuel() { 
         indxr.set(0.6);
         intakeFlap.set(-0.5);
+    }
+
+    public Command stopIntakeCycle(){
+        return run(()->{
+            intakeFlap.stopMotor();
+            indxr.stopMotor();
+            groundIntake.stopMotor();
+        });
+    }
+
+    public Command stopFeedFuel(){
+        return run(() -> {
+            indxr.stopMotor();
+            intakeFlap.stopMotor();
+
+        });
+    }
+
+    public Command stopIndxr() { 
+        return runOnce(() -> indxr.stopMotor());
+    }
+
+
+    public Command stopGroundIntake() { 
+        return runOnce(() -> groundIntake.stopMotor());
+    }
+
+    public Command stopShooter() { 
+        return runOnce(() ->{
+            shooterLeft.stopMotor(); 
+            shooterRight.stopMotor();
+        });
+    }
+
+    public Command stopIntakeFlaps() { 
+        return runOnce(() -> intakeFlap.stopMotor());
+    }
+
+    public Command ejectFuel(){
+        return run(() ->{ 
+            intakeFlap.set(0.5);
+            indxr.set(0.5);
+
+        });
+    }
+
+    public Command stopCycles(){
+        return run(()->{
+            shooterLeft.stopMotor();
+            shooterRight.stopMotor();
+            intakeFlap.stopMotor();
+            indxr.stopMotor();
+            groundIntake.stopMotor();
+        });
     }
     
     public void stopFeed() { 

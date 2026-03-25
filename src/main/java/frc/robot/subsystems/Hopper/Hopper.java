@@ -1,7 +1,6 @@
 package frc.robot.subsystems.hopper;
 
 import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,14 +11,14 @@ import frc.robot.Constants.HopperConstants;
 public class Hopper extends SubsystemBase{
 
     // Define motors
-    VictorSP leaderMotor;
-    VictorSP followMotor;
-
+    VictorSP leftMotor;
+    VictorSP rightMotor;
+    private final double leftMultiplier = 1.175; 
     public Hopper(){
 
         // Initalize motors   --Change this in the Constants.java file--
-        leaderMotor =  new VictorSP(HopperConstants.leftMotorID);
-        followMotor =  new VictorSP(HopperConstants.rightMotorID);
+        leftMotor =  new VictorSP(HopperConstants.leftMotorID);
+        rightMotor =  new VictorSP(HopperConstants.rightMotorID);
 
         SmartDashboard.setDefaultNumber("Left Hopper Speed", 0); 
         SmartDashboard.setDefaultNumber("Right Hopper Speed", 0); 
@@ -29,38 +28,26 @@ public class Hopper extends SubsystemBase{
     public Command hopperOut(Supplier<Double> speed){
         System.out.println(speed.get());
         return run(()-> {
-            leaderMotor.set(speed.get());
-            followMotor.set(speed.get()*1.1);
+            leftMotor.set(speed.get() * leftMultiplier);
+            rightMotor.set(speed.get());
 
-        });
-    }
-
-    public Command spinLeftMotor(Supplier<Double> speed) { 
-        return run(()-> {
-            leaderMotor.set(speed.get()*1.2);
-        });
-    }
-
-    public Command spinRightMotor(Supplier<Double> speed) { 
-        return run(()-> {
-            followMotor.set(speed.get());
         });
     }
 
     public Command hopperIn(Supplier<Double> speed){
         return run(()-> {
-            leaderMotor.set(-speed.get());
-            followMotor.set(-speed.get()*1.2);
+            leftMotor.set(-speed.get() * leftMultiplier);
+            rightMotor.set(-speed.get());
 
         });
     }
 
     public Command stopLeftMotor() { 
-        return runOnce(() -> leaderMotor.stopMotor()); 
+        return runOnce(() -> leftMotor.stopMotor()); 
     }
 
     public Command stopRightMotor() { 
-        return runOnce(() -> followMotor.stopMotor()); 
+        return runOnce(() -> rightMotor.stopMotor()); 
     }
 
     public Command oscillateHopper() { 
@@ -79,22 +66,18 @@ public class Hopper extends SubsystemBase{
         return hopperOut(() -> 0.4).withTimeout(1.75); 
     }
 
+    public Command extendHopperCustom(){
+        return run(()->{
+            leftMotor.set(SmartDashboard.getNumber("Left Hopper Speed", 0));
+            rightMotor.set(SmartDashboard.getNumber("Right Hopper Speed", 0));
+
+        });
+    }
+
     public Command stopHopper(){
         return run(()-> {
-            leaderMotor.stopMotor();
-            followMotor.stopMotor();;
+            leftMotor.stopMotor();
+            rightMotor.stopMotor();;
         });    }
 
-    public Command testLmotor(){
-       return run(()-> leaderMotor.set(SmartDashboard.getNumber("Left Hopper Speed", 0)));
-    }
-
-    public Command testRmotor(){
-        return run(()-> leaderMotor.set(SmartDashboard.getNumber("Right Hopper Speed", 0)));
-    }
-        
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Actual Hopper Speed", leaderMotor.get());
-    }
 }
