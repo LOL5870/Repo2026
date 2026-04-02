@@ -51,7 +51,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left3"
+            "pathName": "left3ExtendHopper"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "left4ExtendHopper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "extendHopper"
+                }
+              }
+            ]
           }
         },
         {
@@ -69,24 +88,11 @@
                 "data": {
                   "name": "hubAlign"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "left 4"
-                }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntake"
+                  "name": "oscillateHopper"
                 }
               }
             ]

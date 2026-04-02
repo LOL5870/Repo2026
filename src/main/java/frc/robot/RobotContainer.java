@@ -57,20 +57,23 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3425.0); 
-    shooterTreeMap.put(0.765, 3495.0); 
-    shooterTreeMap.put(0.545, 3590.0);
-    shooterTreeMap.put(0.375, 3800.0); 
-    shooterTreeMap.put(0.315, 4000.0); 
-    shooterTreeMap.put(0.235, 4100.0); 
+    shooterTreeMap.put(0.905, 3425.0); 
+    shooterTreeMap.put(0.639, 3500.0); 
+    shooterTreeMap.put(0.462, 3625.0); 
+    shooterTreeMap.put(0.375, 3750.0);
+    shooterTreeMap.put(0.315, 3800.0);
+    shooterTreeMap.put(0.275, 3875.0);
+    shooterTreeMap.put(0.235, 4000.0);
 
     NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
-    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5));
+    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.75));
     NamedCommands.registerCommand("hubAlign", new HubAlignAuto(swerveSubsystem, driverXbox));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
     NamedCommands.registerCommand("extendHopper", hopper.hopperExtend());
+    NamedCommands.registerCommand("testShooter", new InstantCommand(() -> System.out.println("shooting")).withTimeout(3));
+    NamedCommands.registerCommand("testIntake", new InstantCommand(() -> System.out.println("intaking")));
     
     
     // Configure Bindings
@@ -83,6 +86,8 @@ public class RobotContainer {
     //sendableChooser.addOption("Left Over Auto", AutoBuilder.buildAuto("OverTrenchLeft"));
     sendableChooser.addOption("Left with depot Auto", AutoBuilder.buildAuto("LeftAutoWdepot"));
     sendableChooser.addOption("middle basic Auto", AutoBuilder.buildAuto("BasicMiddleAuto"));
+    sendableChooser.addOption("Left Auto Extend", AutoBuilder.buildAuto("LeftAutoExtend"));
+    sendableChooser.addOption("Right Auto Extend", AutoBuilder.buildAuto("RightAutoExtend"));
 
     SmartDashboard.putData("Auto chooser", sendableChooser);
 
@@ -100,30 +105,47 @@ public class RobotContainer {
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
     driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
-    driverXbox.povUp().whileTrue(hopper.hopperExtend()).onFalse(hopper.stopHopper());
-    driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
-    driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
+    // driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
+    // driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
+    // driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
 
     opXbox.leftBumper().whileTrue(
       new ShootCycle(
-
         () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
         shooter, 
-        () -> opXbox.rightBumper().getAsBoolean()))
-        .onFalse(shooter.stopCycles()); // shoot when april tag and aligned
+        () -> opXbox.rightBumper().getAsBoolean()
+        ))
+        .onFalse(shooter.stopCycles());
     opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
     opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
     opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
-    opXbox.povUp().whileTrue(new ShooterCycleMan(shooter, 4500)).onFalse(shooter.stopCycles()); // shoot from anywhere
-    opXbox.povDown().whileTrue(new ShooterCycleMan(shooter, 3750)).onFalse(shooter.stopCycles());
+    opXbox.povUp().whileTrue(
+      new ShooterCycleMan(
+        shooter, 
+        4800.0, 
+        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
+        () -> opXbox.b().getAsBoolean() // from ground
+        ))
+        .onFalse(shooter.stopCycles());
+    opXbox.povDown().whileTrue(
+      new ShooterCycleMan(
+        shooter, 
+        3800.0, 
+        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
+        () -> opXbox.b().getAsBoolean() // from ground
+        ))
+        .onFalse(shooter.stopCycles());
+    // opXbox.povUp().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
+    // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
+
   }
 
 
   public Command getAutonomousCommand() {
 
     return sendableChooser.getSelected();
+    // return hopper.hopperExtend(); 
 
   }
   

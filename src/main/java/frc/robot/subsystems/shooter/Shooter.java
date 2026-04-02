@@ -165,6 +165,11 @@ public class Shooter extends SubsystemBase {
         shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl); 
     }
 
+    public void unstuckFuel(){
+        indxr.set(-0.6);
+        intakeFlap.set(-0.5);
+    }
+
     public double getShooterRPM() {
         return shooterRightEncoder.getVelocity(); 
     }
@@ -173,6 +178,13 @@ public class Shooter extends SubsystemBase {
         indxr.set(0.6);
         intakeFlap.set(-0.5);
     }
+
+    public void fromGroundFeed(){
+        indxr.set(0.6);
+        intakeFlap.set(-0.5);
+        groundIntake.set(-0.5);
+    }
+
 
     public Command stopIntakeCycle(){
         return run(()->{
@@ -231,6 +243,13 @@ public class Shooter extends SubsystemBase {
     public void stopFeed() { 
         indxr.stopMotor();
         intakeFlap.stopMotor();
+    }
+
+    public void stopFromGround(){
+        indxr.stopMotor();
+        intakeFlap.stopMotor();
+        groundIntake.stopMotor();
+
     }
 
     public Command stopEverything(Hopper hopper) { 
