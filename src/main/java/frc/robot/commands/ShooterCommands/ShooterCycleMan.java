@@ -18,7 +18,7 @@ public class ShooterCycleMan extends Command{
 
     @Override
     public void initialize() {
-        rpmReached = false;
+        rpmReached = false; // epic
     }
 
     @Override

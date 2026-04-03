@@ -19,6 +19,7 @@ import frc.robot.commands.AutoCommands.AutoShoot;
 import frc.robot.commands.AutoCommands.HubAlign;
 import frc.robot.commands.AutoCommands.HubAlignAuto;
 import frc.robot.commands.ShooterCommands.DriverShoot;
+import frc.robot.commands.ShooterCommands.ShootCycle;
 import frc.robot.commands.ShooterCommands.ShooterCycleMan;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
@@ -112,7 +113,7 @@ public class RobotContainer {
     driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
 
     opXbox.leftBumper().whileTrue(
-      new DriverShoot(
+      new ShootCycle(
 
         () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
         shooter, 
