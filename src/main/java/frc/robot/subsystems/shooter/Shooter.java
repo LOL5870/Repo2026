@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import java.util.function.Supplier;
-
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -112,8 +110,22 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter RIGHT RPM", -shooterRightEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter LEFT RPM", shooterLeftEncoder.getVelocity());
-        SmartDashboard.putNumber("Shooter SETPOINT", 3750); 
-    }   
+        SmartDashboard.putNumber("Shooter SETPOINT", 3750);
+    }
+
+    public boolean isIndxr(){
+        if(shooterRightEncoder.getVelocity() > 0 && shooterLeftEncoder.getVelocity() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isFlywheel(){
+        if(indxr.get() > 0){
+            return true;
+        }
+        return false;
+    }
 
     public Command testShooter(){
         return run(()-> {
@@ -130,19 +142,19 @@ public class Shooter extends SubsystemBase {
         });
     }
 
-    public Command shootCycle(Supplier<Double> shooterLeftDist){
-        return run(()->{
-            shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
-            shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
-        });
-    }
+    // public Command shootCycle(Supplier<Double> shooterLeftDist){
+    //     return run(()->{
+    //         shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
+    //         shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
+    //     });
+    // }
 
-    public Command startFeedShooter() {
-        return run(() ->{
-            indxr.set(0.6);
-            intakeFlap.set(-0.5);
-        });
-    }
+    // public Command startFeedShooter() {
+    //     return run(() ->{
+    //         indxr.set(0.6);
+    //         intakeFlap.set(-0.5);
+    //     });
+    // }
 
     public Command startFeedFuel(){
         return run(() -> {

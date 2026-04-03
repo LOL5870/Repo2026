@@ -5,8 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,7 +18,7 @@ import frc.robot.commands.AutoCommands.Align;
 import frc.robot.commands.AutoCommands.AutoShoot;
 import frc.robot.commands.AutoCommands.HubAlign;
 import frc.robot.commands.AutoCommands.HubAlignAuto;
-import frc.robot.commands.ShooterCommands.ShootCycle;
+import frc.robot.commands.ShooterCommands.DriverShoot;
 import frc.robot.commands.ShooterCommands.ShooterCycleMan;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
@@ -24,8 +26,13 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
+import java.net.NetworkInterface;
+
+import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
+
 import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.thethriftybot.interfaces.NetworkTableInterface;
 
 public class RobotContainer {
 
@@ -72,10 +79,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
     NamedCommands.registerCommand("extendHopper", hopper.hopperExtend());
     
-    
     // Configure Bindings
     configureBindings();
-
+  
     sendableChooser.setDefaultOption("nothing", null);
     sendableChooser.addOption("Left Auto", AutoBuilder.buildAuto("LeftAuto"));
     sendableChooser.addOption("Right Auto", AutoBuilder.buildAuto("RightAuto"));
@@ -106,7 +112,7 @@ public class RobotContainer {
     driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
 
     opXbox.leftBumper().whileTrue(
-      new ShootCycle(
+      new DriverShoot(
 
         () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
         shooter, 

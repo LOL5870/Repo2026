@@ -74,9 +74,9 @@ public final class Constants {
   }
 
   public static enum TAGS {
-      middle(1), 
-      left(2), 
-      right(0);
+      right(0),
+      middle(1),
+      left(2); 
   
     public final int value;
 

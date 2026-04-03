@@ -16,7 +16,7 @@ public class AutoShoot extends Command{
     private Supplier<Double> shooterRPM;
     private Shooter shooter;
     private boolean rpmReached; 
-    private int[] tagIDs; 
+    public int[] tagIDs; 
 
     public AutoShoot(Supplier<Double> shooterRPM, Shooter shooter){
         this.shooterRPM = shooterRPM;
@@ -37,7 +37,7 @@ public class AutoShoot extends Command{
     public void execute() {
 
         if(findID(tagIDs[Constants.TAGS.left.value]) || findID(tagIDs[Constants.TAGS.right.value]) || findID(tagIDs[Constants.TAGS.middle.value])){
-                shooter.setRPM(shooterRPM.get());  
+                shooter.setRPM(shooterRPM.get());
 
             if(-shooter.getShooterRPM() > shooterRPM.get() - 300 && !rpmReached) { 
                 rpmReached = true;
@@ -61,7 +61,7 @@ public class AutoShoot extends Command{
         return false;
     }
     
-    private boolean findID(double id) { 
+    public boolean findID(double id) { 
         RawFiducial idList[] = LimelightHelpers.getRawFiducials("limelight"); 
         
         for(int i = 0; i < idList.length; i++){
