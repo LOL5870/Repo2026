@@ -52,8 +52,15 @@ public class HubAlign extends Command{
     @Override
     public void execute() {
 
-        // Middle
-        if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
+        if(findID(tagIDs[TAGS.middle.value])){
+            xTarget = 0;
+        }
+        // left
+        if(findID(tagIDs[TAGS.left.value])){
+            xTarget = 0;
+        }
+        // right
+        if(findID(tagIDs[TAGS.right.value])){
             xTarget = 0;
         }
 

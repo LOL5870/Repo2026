@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MoveBackMiddle"
+            "pathName": "Copy of sideRightPrac"
           }
         },
         {
@@ -28,11 +28,17 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "sideRightPrac"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "MiddleAuto",
+  "folder": null,
   "choreoAuto": false
 }

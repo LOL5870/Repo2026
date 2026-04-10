@@ -26,11 +26,11 @@ public class AutoShoot extends Command{
 
     @Override
     public void initialize() {
-         if(DriverStation.getAlliance().get() == Alliance.Red)
+        //  if(DriverStation.getAlliance().get() == Alliance.Red)
             tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
-        else
-            tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
-        rpmReached = false; 
+        // else
+        //     tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
+        rpmReached = false;
     }
 
     @Override
@@ -51,9 +51,6 @@ public class AutoShoot extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stopShooter();
-        shooter.stopIndxr();
-        shooter.stopIntakeFlaps();
     }
 
     @Override

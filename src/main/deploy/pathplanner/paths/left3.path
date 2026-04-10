@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.179,
-        "y": 5.373
+        "x": 1.572,
+        "y": 5.816
       },
       "prevControl": {
-        "x": 1.2473972297571874,
-        "y": 7.8314054341129165
+        "x": 0.6315301204819278,
+        "y": 7.958048192771084
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
     "rotation": -31.939
   },
   "reversed": false,
-  "folder": null,
+  "folder": "LeftAutoWdepot",
   "idealStartingState": {
     "velocity": 3.5,
     "rotation": 90.0

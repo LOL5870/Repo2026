@@ -74,9 +74,9 @@ public final class Constants {
   }
 
   public static enum TAGS {
+      right(0),
       middle(1), 
-      left(2), 
-      right(0);
+      left(2);
   
     public final int value;
 
@@ -88,7 +88,7 @@ public final class Constants {
   public static class AprilTagIDs {
     
     // Apple tags
-    public static final int[] RED_HUB_APRIL_TAGS = {2, 10, 5};
+    public static final int[] RED_HUB_APRIL_TAGS = {3, 10, 5};
     public static final int[] BLUE_HUB_APRIL_TAGS = {27, 26, 24};
 
   }

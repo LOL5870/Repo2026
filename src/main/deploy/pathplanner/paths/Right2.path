@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.865,
+        "x": 1.571,
         "y": 2.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": -0.010741797432239686,
+        "x": -0.3047417974322397,
         "y": -0.5129386590584879
       },
       "isLocked": false,
@@ -16,32 +16,32 @@
     },
     {
       "anchor": {
-        "x": 7.785579545454546,
-        "y": 1.221238636363637
+        "x": 7.739514978601996,
+        "y": 0.9879457917261072
       },
       "prevControl": {
-        "x": 7.641284090909091,
-        "y": 0.7883522727272725
+        "x": 7.377232524964336,
+        "y": 0.9879457917261072
       },
       "nextControl": {
-        "x": 7.929875000000001,
-        "y": 1.6541250000000014
+        "x": 8.195817270974926,
+        "y": 0.9879457917261072
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.785579545454546,
-        "y": 3.0249318181818183
+        "x": 7.920656205420826,
+        "y": 3.3557203994293876
       },
       "prevControl": {
-        "x": 7.85501124935612,
-        "y": 1.9024526051035056
+        "x": 7.9900879093224,
+        "y": 2.233241186351075
       },
       "nextControl": {
-        "x": 7.723738636363519,
-        "y": 4.024693181822631
+        "x": 7.8588152963298,
+        "y": 4.355481763070201
       },
       "isLocked": false,
       "linkedName": null
@@ -89,10 +89,10 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.1777378815080852,
-      "maxWaypointRelativePos": 3.5188509874326788,
+      "minWaypointRelativePos": 1.3617866004962882,
+      "maxWaypointRelativePos": 2.886352357320091,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 1.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -116,7 +116,7 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RightAuto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 31.866

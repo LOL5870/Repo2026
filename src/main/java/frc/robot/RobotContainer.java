@@ -57,15 +57,16 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.965, 3425.0); 
-    shooterTreeMap.put(0.765, 3495.0); 
-    shooterTreeMap.put(0.545, 3590.0);
-    shooterTreeMap.put(0.375, 3800.0); 
-    shooterTreeMap.put(0.315, 4000.0); 
-    shooterTreeMap.put(0.235, 4100.0); 
+    shooterTreeMap.put(0.905, 3425.0); 
+    shooterTreeMap.put(0.639, 3500.0); 
+    shooterTreeMap.put(0.462, 3625.0); 
+    shooterTreeMap.put(0.375, 3750.0);
+    shooterTreeMap.put(0.315, 3800.0);
+    shooterTreeMap.put(0.275, 3875.0);
+    shooterTreeMap.put(0.235, 4000.0);
 
-    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
-    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5));
+    NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5).andThen(shooter.stopCycles()));
+    NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(4.5).andThen(shooter.stopCycles()));
     NamedCommands.registerCommand("hubAlign", new HubAlignAuto(swerveSubsystem, driverXbox));
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
@@ -83,8 +84,10 @@ public class RobotContainer {
     //sendableChooser.addOption("Left Over Auto", AutoBuilder.buildAuto("OverTrenchLeft"));
     sendableChooser.addOption("Left with depot Auto", AutoBuilder.buildAuto("LeftAutoWdepot"));
     sendableChooser.addOption("middle basic Auto", AutoBuilder.buildAuto("BasicMiddleAuto"));
+    sendableChooser.addOption("PracAuto", AutoBuilder.buildAuto("pracAuto"));
 
     SmartDashboard.putData("Auto chooser", sendableChooser);
+    //SmartDashboard.setNetworkTableInstance(null);
 
     DriverStation.silenceJoystickConnectionWarning(true); // Get rid of controller error
   }
@@ -116,14 +119,29 @@ public class RobotContainer {
     opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
     opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
-    opXbox.povUp().whileTrue(new ShooterCycleMan(shooter, 4500)).onFalse(shooter.stopCycles()); // shoot from anywhere
-    opXbox.povDown().whileTrue(new ShooterCycleMan(shooter, 3750)).onFalse(shooter.stopCycles());
+    opXbox.povUp().whileTrue(
+      new ShooterCycleMan(
+        shooter, 
+        4800.0, 
+        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
+        () -> opXbox.b().getAsBoolean() // from ground
+        ))
+        .onFalse(shooter.stopCycles());
+    opXbox.povDown().whileTrue(
+      new ShooterCycleMan(
+        shooter, 
+        3800.0, 
+        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
+        () -> opXbox.b().getAsBoolean() // from ground
+        ))
+        .onFalse(shooter.stopCycles());
   }
 
 
   public Command getAutonomousCommand() {
 
     return sendableChooser.getSelected();
+    //return new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5).andThen(shooter.stopCycles());
 
   }
   

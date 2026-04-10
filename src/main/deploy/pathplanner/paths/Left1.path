@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.650898716119829,
-        "y": 7.35376604850214
+        "x": 3.651,
+        "y": 7.354
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.801926631063112,
-        "y": 7.552990968900881
+        "x": 2.4565591152054718,
+        "y": 7.269836361136414
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.788,
-        "y": 5.646
+        "x": 1.572,
+        "y": 5.816
       },
       "prevControl": {
-        "x": 1.267345221112696,
-        "y": 7.277422253922967
+        "x": 2.1395542168674693,
+        "y": 7.204036144578313
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -32.829
   },
   "reversed": false,
-  "folder": null,
+  "folder": "LeftAutoWdepot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

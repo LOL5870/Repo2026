@@ -28,11 +28,17 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle to center 1 "
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "MiddleAuto",
+  "folder": "WorkInProgress",
   "choreoAuto": false
 }

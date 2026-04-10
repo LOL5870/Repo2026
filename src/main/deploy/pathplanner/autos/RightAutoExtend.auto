@@ -5,53 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Left1"
-          }
-        },
-        {
           "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shootCycleMiddle"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "hubAlign"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left2"
+                  "pathName": "right4Extend"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntake"
+                  "name": "extendHopper"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left3"
           }
         },
         {
@@ -61,13 +30,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shootCycle"
+                  "name": "testShooter"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "hubAlign"
+                  "name": "oscillateHopper"
                 }
               }
             ]
@@ -77,6 +46,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "LeftAutos",
+  "folder": "WorkInProgress",
   "choreoAuto": false
 }

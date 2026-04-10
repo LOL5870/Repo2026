@@ -34,10 +34,10 @@ public class HubAlignAuto extends Command{
 
     @Override
     public void initialize() {
-        if(DriverStation.getAlliance().get() == Alliance.Red)
+        // if(DriverStation.getAlliance().get() == Alliance.Red)
             tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
-        else
-            tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
+        // else
+        //     tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
 
     }
 
@@ -45,7 +45,15 @@ public class HubAlignAuto extends Command{
     public void execute() {
 
         // Middle
-        if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
+        if(findID(tagIDs[TAGS.middle.value])){
+            xTarget = 0;
+        }
+        // left
+        if(findID(tagIDs[TAGS.left.value])){
+            xTarget = 0;
+        }
+        // right
+        if(findID(tagIDs[TAGS.right.value])){
             xTarget = 0;
         }
 
