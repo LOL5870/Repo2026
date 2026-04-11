@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -28,6 +31,7 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     instance = this;
+    SmartDashboard.setDefaultBoolean("Win Auto?", false); 
   }
 
   public static Robot getInstance() {
@@ -49,6 +53,7 @@ public class Robot extends TimedRobot {
     // let the robot stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
+    
 
     if (isSimulation()) {
       DriverStation.silenceJoystickConnectionWarning(true);
@@ -65,6 +70,10 @@ public class Robot extends TimedRobot {
    * and
    * SmartDashboard integrated updating.
    */
+  private String currentShift = "UNKNOWN"; 
+  private double timerOffset = 0; 
+  private double practiceOffset = 5; 
+  private boolean isHubEnabled = false; 
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler. This is responsible for polling buttons, adding
@@ -74,6 +83,66 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+
+    if(DriverStation.isAutonomous())
+      isHubEnabled = false; 
+
+    SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+    boolean autoWin = SmartDashboard.getBoolean("Win Auto?", false); 
+
+    if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 140 - practiceOffset && DriverStation.getMatchTime() > 130 - practiceOffset) { 
+      isHubEnabled = true; 
+      currentShift = "TRANSITION SHIFT"; 
+      timerOffset = 10; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 130- practiceOffset && DriverStation.getMatchTime() > 105- practiceOffset) { 
+      if(autoWin)
+        isHubEnabled = false; 
+      else 
+        isHubEnabled = true; 
+
+      currentShift = "SHIFT 1"; 
+      timerOffset = 35; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 105- practiceOffset && DriverStation.getMatchTime() > 80- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = true; 
+      else 
+        isHubEnabled = false; 
+      currentShift = "SHIFT 2"; 
+      timerOffset = 60; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 80- practiceOffset && DriverStation.getMatchTime() > 55- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = false; 
+      else 
+        isHubEnabled = true; 
+      currentShift = "SHIFT 3";
+      timerOffset = 85; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 55- practiceOffset && DriverStation.getMatchTime() > 30- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = true; 
+      else 
+        isHubEnabled = false; 
+      currentShift = "SHIFT 4";
+      timerOffset = 110;  
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 30- practiceOffset && DriverStation.getMatchTime() > 0) {
+      isHubEnabled = true; 
+      currentShift = "END GAME"; 
+      timerOffset = 135; 
+    }
+
+
+
+    SmartDashboard.putString("Current Shift", currentShift);
+    if(DriverStation.isTeleop())
+      SmartDashboard.putNumber("Shift Timer", timerOffset - (135 - DriverStation.getMatchTime()));
+    else 
+      SmartDashboard.putNumber("Shift Timer", -1);
+
+    SmartDashboard.putBoolean("IsHubEnabled", isHubEnabled);
     CommandScheduler.getInstance().run();
   }
 

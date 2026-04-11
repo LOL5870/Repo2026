@@ -124,8 +124,8 @@ public class Shooter extends SubsystemBase {
 
     public Command startIntakeCycle(){
         return run(()->{
-            intakeFlap.set(-0.75);
-            indxr.set(-0.70);
+            intakeFlap.set(-0.85);
+            indxr.set(-0.80);
             groundIntake.set(-0.5);
         });
     }
