@@ -41,7 +41,8 @@ public class AutoShoot extends Command{
 
             if(-shooter.getShooterRPM() > shooterRPM.get() - 1000 && !rpmReached) { 
                 rpmReached = true;
-                
+                Constants.rpmReached = true; 
+
             }
 
             if(rpmReached)
@@ -54,6 +55,7 @@ public class AutoShoot extends Command{
         shooter.stopShooter();
         shooter.stopIndxr();
         shooter.stopIntakeFlaps();
+        Constants.rpmReached = false; 
     }
 
     @Override

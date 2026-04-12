@@ -3,6 +3,7 @@ package frc.robot.commands.ShooterCommands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.shooter.Shooter;
 
 public class ShooterCycleMan extends Command{
@@ -34,6 +35,7 @@ public class ShooterCycleMan extends Command{
 
         if(-shooter.getShooterRPM() > RPM - 1000 && !rpmReached) { 
             rpmReached = true;
+            Constants.rpmReached = true; 
             
         }
 
@@ -56,6 +58,7 @@ public class ShooterCycleMan extends Command{
     @Override
     public void end(boolean interrupted) {
         shooter.stopCycles();
+        Constants.rpmReached = false;
     }
 
     @Override

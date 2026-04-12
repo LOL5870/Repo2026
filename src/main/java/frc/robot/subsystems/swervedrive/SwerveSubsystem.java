@@ -17,6 +17,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import com.studica.frc.AHRS;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,6 +40,7 @@ import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.SwerveModule;
+import swervelib.encoders.CANCoderSwerve;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -146,10 +149,8 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(names[i], modules[i].getAbsoluteEncoder().getAbsolutePosition());
       SmartDashboard.putNumber(names[1], modules[1].getAbsoluteEncoder().getAbsolutePosition());
     }
-    SmartDashboard.putNumber("Gyro", swerveDrive.getGyro().getRotation3d().getAngle());
-
-    SmartDashboard.putString("Odometry", getPose().toString());
-    
+    SmartDashboard.putData("Gyro", (AHRS) swerveDrive.getGyro().getIMU());
+    SmartDashboard.putString("Odometry", getPose().toString());    
   }
 
   @Override

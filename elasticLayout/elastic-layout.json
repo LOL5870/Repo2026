@@ -1,0 +1,856 @@
+{
+  "version": 1.0,
+  "grid_size": 32,
+  "tabs": [
+    {
+      "name": "Teleoperated",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "USB Camera 0",
+            "x": 0.0,
+            "y": 160.0,
+            "width": 640.0,
+            "height": 576.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/USB Camera 0",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 100
+            }
+          },
+          {
+            "title": "Shift Timer",
+            "x": 640.0,
+            "y": 512.0,
+            "width": 640.0,
+            "height": 224.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Shift Timer",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 20,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "Match Time",
+            "x": 640.0,
+            "y": 0.0,
+            "width": 640.0,
+            "height": 288.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Match Time",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 20,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "IsHubEnabled",
+            "x": 1280.0,
+            "y": 0.0,
+            "width": 640.0,
+            "height": 288.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/IsHubEnabled",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Current Shift",
+            "x": 640.0,
+            "y": 288.0,
+            "width": 640.0,
+            "height": 224.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Current Shift",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Auto chooser",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 640.0,
+            "height": 160.0,
+            "type": "Split Button Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto chooser",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "RPM Reached",
+            "x": 1280.0,
+            "y": 736.0,
+            "width": 480.0,
+            "height": 192.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/RPM Reached",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Voltage",
+            "x": 640.0,
+            "y": 736.0,
+            "width": 640.0,
+            "height": 192.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/SmartDashboard/Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 4.0,
+              "max_value": 13.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "FMSInfo",
+            "x": 0.0,
+            "y": 736.0,
+            "width": 640.0,
+            "height": 192.0,
+            "type": "FMSInfo",
+            "properties": {
+              "topic": "/FMSInfo",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "NavX Alerts",
+            "x": 1600.0,
+            "y": 288.0,
+            "width": 320.0,
+            "height": 448.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/IMU",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Win Auto?",
+            "x": 1760.0,
+            "y": 736.0,
+            "width": 160.0,
+            "height": 192.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Win Auto?",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Encoder Alerts",
+            "x": 1280.0,
+            "y": 288.0,
+            "width": 320.0,
+            "height": 448.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Encoders",
+              "period": 0.06
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Diagnostics",
+      "grid_layout": {
+        "layouts": [
+          {
+            "title": "frontleft",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 352.0,
+            "height": 384.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Absolute Encoder Read Issue",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Absolute Encoder Read Issue",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Adjusted Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Adjusted Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Angle Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Angle Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Raw Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Angle Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Raw Angle Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Raw Drive Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Velocity",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Raw Drive Velocity",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Speed Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontleft/Speed Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "frontright",
+            "x": 352.0,
+            "y": 0.0,
+            "width": 352.0,
+            "height": 384.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Absolute Encoder Read Issue",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Absolute Encoder Read Issue",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Adjusted Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Adjusted Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Angle Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Angle Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Raw Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Angle Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Raw Angle Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Raw Drive Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Velocity",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Raw Drive Velocity",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Speed Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/frontright/Speed Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "backright",
+            "x": 1216.0,
+            "y": 0.0,
+            "width": 352.0,
+            "height": 416.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Absolute Encoder Read Issue",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Absolute Encoder Read Issue",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Adjusted Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Adjusted Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Angle Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Angle Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Raw Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Angle Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Raw Angle Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Raw Drive Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Velocity",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Raw Drive Velocity",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Speed Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backright/Speed Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "backleft",
+            "x": 1568.0,
+            "y": 0.0,
+            "width": 352.0,
+            "height": 416.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Absolute Encoder Read Issue",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Absolute Encoder Read Issue",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Adjusted Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Adjusted Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Angle Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Angle Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Absolute Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Raw Absolute Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Angle Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Raw Angle Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Encoder",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Raw Drive Encoder",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Raw Drive Velocity",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Raw Drive Velocity",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Speed Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/swerve/modules/backleft/Speed Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          }
+        ],
+        "containers": [
+          {
+            "title": "Power Distribution Board",
+            "x": 704.0,
+            "y": 128.0,
+            "width": 512.0,
+            "height": 800.0,
+            "type": "PowerDistribution",
+            "properties": {
+              "topic": "/SmartDashboard/Power Distribution Board",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "swerve",
+            "x": 0.0,
+            "y": 384.0,
+            "width": 352.0,
+            "height": 320.0,
+            "type": "YAGSL Swerve Drive",
+            "properties": {
+              "topic": "/SmartDashboard/swerve",
+              "period": 0.06,
+              "show_robot_rotation": true,
+              "show_desired_states": true,
+              "angle_offset": 0.0
+            }
+          },
+          {
+            "title": "Voltage",
+            "x": 704.0,
+            "y": 0.0,
+            "width": 512.0,
+            "height": 128.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/SmartDashboard/Diagnostics/Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 4.0,
+              "max_value": 13.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "Gyro",
+            "x": 352.0,
+            "y": 384.0,
+            "width": 352.0,
+            "height": 320.0,
+            "type": "Gyro",
+            "properties": {
+              "topic": "/SmartDashboard/Gyro",
+              "period": 0.06,
+              "counter_clockwise_positive": true
+            }
+          },
+          {
+            "title": "Shooter RIGHT RPM",
+            "x": 256.0,
+            "y": 704.0,
+            "width": 224.0,
+            "height": 224.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Shooter RIGHT RPM",
+              "period": 0.033,
+              "data_type": "double"
+            }
+          },
+          {
+            "title": "Shooter LEFT RPM",
+            "x": 0.0,
+            "y": 704.0,
+            "width": 256.0,
+            "height": 224.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Shooter LEFT RPM",
+              "period": 0.06,
+              "data_type": "double"
+            }
+          },
+          {
+            "title": "Shooter SETPOINT",
+            "x": 480.0,
+            "y": 704.0,
+            "width": 224.0,
+            "height": 224.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Shooter SETPOINT",
+              "period": 0.06,
+              "data_type": "double"
+            }
+          },
+          {
+            "title": "Encoder Alerts",
+            "x": 1216.0,
+            "y": 416.0,
+            "width": 352.0,
+            "height": 256.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Encoders",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Gyro Alerts",
+            "x": 1216.0,
+            "y": 672.0,
+            "width": 352.0,
+            "height": 256.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/IMU",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Swerve Alerts",
+            "x": 1568.0,
+            "y": 672.0,
+            "width": 352.0,
+            "height": 256.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Swerve Drive",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Current",
+            "x": 1568.0,
+            "y": 416.0,
+            "width": 352.0,
+            "height": 256.0,
+            "type": "Graph",
+            "properties": {
+              "topic": "/SmartDashboard/Diagnostics/Current",
+              "period": 0.033,
+              "data_type": "double",
+              "time_displayed": 5.0,
+              "color": 4278238420,
+              "line_width": 2.0
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -22,6 +22,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static boolean rpmReached = false;
+
   public static final double MAX_SPEED = Units.feetToMeters(14.5);
 
   public static final class DrivebaseConstants {

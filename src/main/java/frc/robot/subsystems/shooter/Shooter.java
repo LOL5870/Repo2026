@@ -105,14 +105,13 @@ public class Shooter extends SubsystemBase {
         // Initialzing the widgets
         SmartDashboard.setDefaultNumber("Shooters Speed", 0);
         SmartDashboard.setDefaultNumber("Intake Flaps Speed", 0);
-
+        SmartDashboard.setDefaultNumber("Shooter SETPOINT", 0); 
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter RIGHT RPM", -shooterRightEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter LEFT RPM", shooterLeftEncoder.getVelocity());
-        SmartDashboard.putNumber("Shooter SETPOINT", 3750); 
     }   
 
     public Command testShooter(){
@@ -132,6 +131,7 @@ public class Shooter extends SubsystemBase {
 
     public Command shootCycle(Supplier<Double> shooterLeftDist){
         return run(()->{
+            SmartDashboard.putNumber("Shooter SETPOINT", shooterLeftDist.get()); 
             shooterLeftController.setSetpoint(shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
             shooterRightController.setSetpoint(-shooterLeftDist.get(), ControlType.kMAXMotionVelocityControl); 
         });
@@ -154,6 +154,7 @@ public class Shooter extends SubsystemBase {
 
     public Command fixedRPM(double rpm){
         return run(()->{
+            SmartDashboard.putNumber("Shooter SETPOINT", rpm); 
             shooterLeftController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl); 
             shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl);
         });
@@ -161,6 +162,7 @@ public class Shooter extends SubsystemBase {
     }
     
     public void setRPM(double rpm){
+        SmartDashboard.putNumber("Shooter SETPOINT", rpm); 
         shooterLeftController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl); 
         shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl); 
     }
@@ -213,6 +215,7 @@ public class Shooter extends SubsystemBase {
 
     public Command stopShooter() { 
         return runOnce(() ->{
+            SmartDashboard.putNumber("Shooter SETPOINT", 0); 
             shooterLeft.stopMotor(); 
             shooterRight.stopMotor();
         });
@@ -232,6 +235,7 @@ public class Shooter extends SubsystemBase {
 
     public Command stopCycles(){
         return run(()->{
+            SmartDashboard.putNumber("Shooter SETPOINT", 0); 
             shooterLeft.stopMotor();
             shooterRight.stopMotor();
             intakeFlap.stopMotor();

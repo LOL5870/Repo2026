@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,13 +28,15 @@ public class Robot extends TimedRobot {
 
   private static Robot instance;
   private Command m_autonomousCommand;
-
+  private PowerDistribution pd; 
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
 
   public Robot() {
     instance = this;
+    SmartDashboard.setDefaultBoolean("Win Auto?", false); 
+    pd = new PowerDistribution(1, ModuleType.kRev); 
   }
 
   public static Robot getInstance() {
@@ -49,6 +58,7 @@ public class Robot extends TimedRobot {
     // let the robot stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
+    // CameraServer.startAutomaticCapture(); 
 
     if (isSimulation()) {
       DriverStation.silenceJoystickConnectionWarning(true);
@@ -65,6 +75,10 @@ public class Robot extends TimedRobot {
    * and
    * SmartDashboard integrated updating.
    */
+  private String currentShift = "UNKNOWN"; 
+  private double timerOffset = 0; 
+  private double practiceOffset = 0; 
+  private boolean isHubEnabled = false; 
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler. This is responsible for polling buttons, adding
@@ -74,6 +88,75 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+
+    if(DriverStation.isAutonomous()) { 
+      isHubEnabled = false; 
+      currentShift = "AUTONOMOUS";
+    }
+
+    SmartDashboard.putNumber("Match Info/Match Time", DriverStation.getMatchTime());
+    boolean autoWin = SmartDashboard.getBoolean("Match Info/Win Auto?", false); 
+
+    if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 140 - practiceOffset && DriverStation.getMatchTime() > 130 - practiceOffset) { 
+      isHubEnabled = true; 
+      currentShift = "TRANSITION SHIFT"; 
+      timerOffset = 10; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 130- practiceOffset && DriverStation.getMatchTime() > 105- practiceOffset) { 
+      if(autoWin)
+        isHubEnabled = false; 
+      else 
+        isHubEnabled = true; 
+
+      currentShift = "SHIFT 1"; 
+      timerOffset = 35; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 105- practiceOffset && DriverStation.getMatchTime() > 80- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = true; 
+      else 
+        isHubEnabled = false; 
+      currentShift = "SHIFT 2"; 
+      timerOffset = 60; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 80- practiceOffset && DriverStation.getMatchTime() > 55- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = false; 
+      else 
+        isHubEnabled = true; 
+      currentShift = "SHIFT 3";
+      timerOffset = 85; 
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 55- practiceOffset && DriverStation.getMatchTime() > 30- practiceOffset) {
+      if(autoWin)
+        isHubEnabled = true; 
+      else 
+        isHubEnabled = false; 
+      currentShift = "SHIFT 4";
+      timerOffset = 110;  
+    }
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 30- practiceOffset && DriverStation.getMatchTime() > 0) {
+      isHubEnabled = true; 
+      currentShift = "END GAME"; 
+      timerOffset = 140 - practiceOffset; 
+    }
+
+
+    // DIAGNOSTICS
+    SmartDashboard.putData("Diagnostics/Power Distribution Board", pd); 
+    SmartDashboard.putNumber("Diagnostics/Voltage", RobotController.getBatteryVoltage()); 
+    SmartDashboard.putNumber("Diagnostics/Current", pd.getTotalCurrent());
+
+    // Match Info
+    SmartDashboard.putString("Match Info/Current Shift", currentShift);
+    if(DriverStation.isTeleop())
+      SmartDashboard.putNumber("Match Info/Shift Timer", timerOffset - ((140 - practiceOffset) - DriverStation.getMatchTime()));
+    else 
+      SmartDashboard.putNumber("Match Info/Shift Timer", -1);
+
+    SmartDashboard.putBoolean("Match Info/RPM Reached", Constants.rpmReached); 
+    SmartDashboard.putBoolean("Match Info/IsHubEnabled", isHubEnabled);
+
     CommandScheduler.getInstance().run();
   }
 
