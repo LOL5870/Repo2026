@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -28,7 +26,6 @@ public class Robot extends TimedRobot {
 
   private static Robot instance;
   private Command m_autonomousCommand;
-  private PowerDistribution pd; 
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
@@ -36,7 +33,6 @@ public class Robot extends TimedRobot {
   public Robot() {
     instance = this;
     SmartDashboard.setDefaultBoolean("Win Auto?", false); 
-    pd = new PowerDistribution(1, ModuleType.kRev); 
   }
 
   public static Robot getInstance() {
@@ -143,10 +139,11 @@ public class Robot extends TimedRobot {
 
 
     // DIAGNOSTICS
-    SmartDashboard.putData("Diagnostics/Power Distribution Board", pd); 
+    // SmartDashboard.putData("Diagnostics/Power Distribution Board", pd); 
     SmartDashboard.putNumber("Diagnostics/Voltage", RobotController.getBatteryVoltage()); 
-    SmartDashboard.putNumber("Diagnostics/Current", pd.getTotalCurrent());
+    SmartDashboard.putNumber("Diagnostics/Current", RobotController.getInputCurrent()); 
 
+    
     // Match Info
     SmartDashboard.putString("Match Info/Current Shift", currentShift);
     if(DriverStation.isTeleop())
