@@ -128,7 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     setupPathPlanner();
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
-
+    SmartDashboard.putBoolean("Reset Alerts", false); 
   }
 
   /**
@@ -149,6 +149,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
 
     gyro = (AHRS) swerveDrive.getGyro().getIMU(); 
+
+    if(SmartDashboard.getBoolean("Reset Alerts", false)) { 
+      gyroConnectedAlert.set(false);
+      gyroDisconnectAlert.set(false);
+    }
 
     if(!gyro.isConnected()) { 
       gyroDisconnectAlert.set(true);
@@ -258,6 +263,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public boolean getGyroConnected() { 
     return gyro.isConnected(); 
   }
+
+  
 
   /**
    * Use PathPlanner Path finding to go to a point on the field.
