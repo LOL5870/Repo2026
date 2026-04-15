@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,7 +29,6 @@ public class Robot extends TimedRobot {
   private static Robot instance;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-
   private Timer disabledTimer;
 
   public Robot() {
@@ -143,6 +144,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Diagnostics/Voltage", RobotController.getBatteryVoltage()); 
     SmartDashboard.putNumber("Diagnostics/Current", RobotController.getInputCurrent()); 
 
+
     
     // Match Info
     SmartDashboard.putString("Match Info/Current Shift", currentShift);
@@ -154,6 +156,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Match Info/RPM Reached", Constants.rpmReached); 
     SmartDashboard.putBoolean("Match Info/IsHubEnabled", isHubEnabled);
 
+    
     CommandScheduler.getInstance().run();
   }
 
@@ -216,6 +219,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
   }
 
   @Override

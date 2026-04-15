@@ -35,7 +35,7 @@ public class RobotContainer {
   InterpolatingDoubleTreeMap  shooterTreeMap = new InterpolatingDoubleTreeMap();
    
   // Swerve Initialization
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve"));
 
   private SendableChooser<Command> sendableChooser = new SendableChooser<>();
@@ -105,6 +105,7 @@ public class RobotContainer {
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
     driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
     driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
+    driverXbox.b().whileTrue(shooter.spinindxr()).onFalse(shooter.stopCycles()); 
     // driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
     // driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
     // driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 

@@ -27,8 +27,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -69,6 +71,11 @@ public class SwerveSubsystem extends SubsystemBase {
    * Enable vision odometry updates while driving.
    */
   private final boolean visionDriveTest = false;
+  private Alert gyroDisconnectAlert = new Alert("IMU", "NavX: Disconnected", AlertType.kError); 
+  private Alert gyroConnectedAlert = new Alert("IMU", "NavX: Connected", AlertType.kInfo); 
+
+
+  private AHRS gyro; 
 
   /**
    * PhotonVision class to keep an accurate odometry.
@@ -141,6 +148,14 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
+    gyro = (AHRS) swerveDrive.getGyro().getIMU(); 
+
+    if(!gyro.isConnected()) { 
+      gyroDisconnectAlert.set(true);
+      gyroConnectedAlert.set(false);
+    } else { 
+      gyroConnectedAlert.set(true);
+    }
     String[] names = { "Front Left", "Front Right", "Back Left", "Back Right" };
     // System.out.println(LimelightHelpers.getTA("limelight"));
     SwerveModule[] modules = swerveDrive.getModules();
@@ -149,7 +164,7 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(names[i], modules[i].getAbsoluteEncoder().getAbsolutePosition());
       SmartDashboard.putNumber(names[1], modules[1].getAbsoluteEncoder().getAbsolutePosition());
     }
-    SmartDashboard.putData("Gyro", (AHRS) swerveDrive.getGyro().getIMU());
+    SmartDashboard.putData("Gyro", gyro);
     SmartDashboard.putString("Odometry", getPose().toString());    
   }
 
@@ -238,6 +253,10 @@ public class SwerveSubsystem extends SubsystemBase {
     // Create a path following command using AutoBuilder. This will also trigger
     // event markers.
     return new PathPlannerAuto(pathName);
+  }
+
+  public boolean getGyroConnected() { 
+    return gyro.isConnected(); 
   }
 
   /**

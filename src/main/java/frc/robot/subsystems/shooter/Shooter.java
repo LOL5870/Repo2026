@@ -129,6 +129,10 @@ public class Shooter extends SubsystemBase {
         });
     }
 
+    public Command spinindxr() { 
+        return run(() -> indxr.set(.5)); 
+    }
+
     public Command shootCycle(Supplier<Double> shooterLeftDist){
         return run(()->{
             SmartDashboard.putNumber("Shooter SETPOINT", shooterLeftDist.get()); 
