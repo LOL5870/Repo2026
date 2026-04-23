@@ -74,7 +74,6 @@ public class SwerveSubsystem extends SubsystemBase {
   private Alert gyroDisconnectAlert = new Alert("IMU", "NavX: Disconnected", AlertType.kError); 
   private Alert gyroConnectedAlert = new Alert("IMU", "NavX: Connected", AlertType.kInfo); 
 
-
   private AHRS gyro; 
 
   /**
@@ -161,6 +160,7 @@ public class SwerveSubsystem extends SubsystemBase {
     } else { 
       gyroConnectedAlert.set(true);
     }
+    
     String[] names = { "Front Left", "Front Right", "Back Left", "Back Right" };
     // System.out.println(LimelightHelpers.getTA("limelight"));
     SwerveModule[] modules = swerveDrive.getModules();

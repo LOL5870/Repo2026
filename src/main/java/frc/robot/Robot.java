@@ -94,12 +94,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Match Info/Match Time", DriverStation.getMatchTime());
     boolean autoWin = SmartDashboard.getBoolean("Match Info/Win Auto?", false); 
 
-    if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 140 - practiceOffset && DriverStation.getMatchTime() > 130 - practiceOffset) { 
+    if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 140 - practiceOffset && DriverStation.getMatchTime() >= 130 - practiceOffset) { 
       isHubEnabled = true; 
       currentShift = "TRANSITION SHIFT"; 
       timerOffset = 10; 
     }
-    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 130- practiceOffset && DriverStation.getMatchTime() > 105- practiceOffset) { 
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 130- practiceOffset && DriverStation.getMatchTime() >= 105- practiceOffset) { 
       if(autoWin)
         isHubEnabled = false; 
       else 
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
       currentShift = "SHIFT 1"; 
       timerOffset = 35; 
     }
-    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 105- practiceOffset && DriverStation.getMatchTime() > 80- practiceOffset) {
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 105- practiceOffset && DriverStation.getMatchTime() >= 80- practiceOffset) {
       if(autoWin)
         isHubEnabled = true; 
       else 
@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
       currentShift = "SHIFT 2"; 
       timerOffset = 60; 
     }
-    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 80- practiceOffset && DriverStation.getMatchTime() > 55- practiceOffset) {
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 80- practiceOffset && DriverStation.getMatchTime() >= 55- practiceOffset) {
       if(autoWin)
         isHubEnabled = false; 
       else 
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
       currentShift = "SHIFT 3";
       timerOffset = 85; 
     }
-    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 55- practiceOffset && DriverStation.getMatchTime() > 30- practiceOffset) {
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 55- practiceOffset && DriverStation.getMatchTime() >= 30- practiceOffset) {
       if(autoWin)
         isHubEnabled = true; 
       else 
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
       currentShift = "SHIFT 4";
       timerOffset = 110;  
     }
-    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 30- practiceOffset && DriverStation.getMatchTime() > 0) {
+    else if(DriverStation.isTeleop() && DriverStation.getMatchTime() < 30- practiceOffset && DriverStation.getMatchTime() >= 0) {
       isHubEnabled = true; 
       currentShift = "END GAME"; 
       timerOffset = 140 - practiceOffset; 
@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
     else 
       SmartDashboard.putNumber("Match Info/Shift Timer", -1);
 
-    SmartDashboard.putBoolean("Match Info/RPM Reached", Constants.rpmReached); 
+    SmartDashboard.putBoolean("Match Info/RPM Reached", Constants.rpmReached);
     SmartDashboard.putBoolean("Match Info/IsHubEnabled", isHubEnabled);
 
     

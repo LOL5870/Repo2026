@@ -31,7 +31,7 @@ public class ShootCycle extends Command{
 
         if(-shooter.getShooterRPM() > shooterRPM.get() - 1000 && !rpmReached) { 
             rpmReached = true;
-            Constants.rpmReached = true; 
+            Constants.rpmReached = true;
         }
 
         if(isFeed.get() && rpmReached){
@@ -40,14 +40,15 @@ public class ShootCycle extends Command{
 
         else{
             shooter.stopFeed();
-            rpmReached = false; 
+            rpmReached = false;
+            Constants.rpmReached = false;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         shooter.stopCycles();
-        Constants.rpmReached = true; 
+        Constants.rpmReached = false; 
         rpmReached = false;
     }
 

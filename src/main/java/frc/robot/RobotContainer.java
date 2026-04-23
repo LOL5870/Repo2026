@@ -18,12 +18,15 @@ import frc.robot.commands.AutoCommands.HubAlign;
 import frc.robot.commands.AutoCommands.HubAlignAuto;
 import frc.robot.commands.ShooterCommands.ShootCycle;
 import frc.robot.commands.ShooterCommands.ShooterCycleMan;
+import frc.robot.commands.ShooterCommands.UnstuckBall;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
+
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -57,17 +60,19 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Shooter tree map
-    shooterTreeMap.put(0.905, 3425.0); 
-    shooterTreeMap.put(0.639, 3500.0); 
-    shooterTreeMap.put(0.462, 3625.0); 
-    shooterTreeMap.put(0.375, 3750.0);
-    shooterTreeMap.put(0.315, 3800.0);
-    shooterTreeMap.put(0.275, 3875.0);
-    shooterTreeMap.put(0.235, 4000.0);
+    shooterTreeMap.put(0.905, 3350.0);
+    shooterTreeMap.put(0.639, 3425.0);
+    shooterTreeMap.put(0.462, 3525.0);
+    shooterTreeMap.put(0.375, 3625.0);
+    shooterTreeMap.put(0.315, 3650.0);
+    shooterTreeMap.put(0.275, 3700.0);
+    shooterTreeMap.put(0.247, 3725.0);
+    shooterTreeMap.put(0.235, 3900.0);
 
     NamedCommands.registerCommand("shootCycleMiddle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.5));
     NamedCommands.registerCommand("shootCycle", new AutoShoot(() -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")), shooter).withTimeout(3.75));
-    NamedCommands.registerCommand("hubAlign", new HubAlignAuto(swerveSubsystem, driverXbox));
+    NamedCommands.registerCommand("hubAlignRight", new HubAlignAuto(swerveSubsystem));
+    NamedCommands.registerCommand("hubAlignLeft", align);
     //NamedCommands.registerCommand("stopEverything", shooter.stopEverything(hopper));
     NamedCommands.registerCommand("runIntake", shooter.startIntakeCycle());
     NamedCommands.registerCommand("oscillateHopper", hopper.oscillateHopper());
@@ -137,6 +142,7 @@ public class RobotContainer {
         () -> opXbox.b().getAsBoolean() // from ground
         ))
         .onFalse(shooter.stopCycles());
+    opXbox.x().whileTrue(new UnstuckBall(shooter, 4000)).onFalse(shooter.stopCycles());
     // opXbox.povUp().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
     // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
 

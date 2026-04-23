@@ -5,7 +5,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.vision.LimelightHelpers.RawFiducial;
@@ -19,14 +18,12 @@ public class HubAlignAuto extends Command{
     private SwerveSubsystem swerveSubsystem; 
     private PIDController rotController; 
     private double xTarget;
-    private CommandXboxController controller;
     private int[] tagIDs;
     
 
-    public HubAlignAuto(SwerveSubsystem subsystem, CommandXboxController controller) {
+    public HubAlignAuto(SwerveSubsystem subsystem) {
 
         this.swerveSubsystem = subsystem;
-        this.controller = controller;
         rotController = new PIDController(AutoConstants.HUB_ALIGN_PID.kP, AutoConstants.HUB_ALIGN_PID.kI, AutoConstants.HUB_ALIGN_PID.kD);
         addRequirements(swerveSubsystem);
     }
@@ -38,7 +35,6 @@ public class HubAlignAuto extends Command{
             tagIDs = AprilTagIDs.RED_HUB_APRIL_TAGS;
         else
             tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
-
     }
 
     @Override
@@ -46,12 +42,12 @@ public class HubAlignAuto extends Command{
 
         // Middle
         if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-            xTarget = 0;
+            xTarget = -1;
         }
 
         double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
 
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), -controller.getLeftX(), rot, swerveSubsystem.getHeading());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, rot, swerveSubsystem.getHeading());
         swerveSubsystem.setChassisSpeeds(chassisSpeeds);
     }
 

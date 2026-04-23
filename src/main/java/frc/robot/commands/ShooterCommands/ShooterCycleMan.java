@@ -35,7 +35,7 @@ public class ShooterCycleMan extends Command{
 
         if(-shooter.getShooterRPM() > RPM - 1000 && !rpmReached) { 
             rpmReached = true;
-            Constants.rpmReached = true; 
+            Constants.rpmReached = true;
             
         }
 

@@ -26,7 +26,8 @@ public class HubAlign extends Command{
     private int[] tagIDs;
     private Supplier<Boolean> isOscillate; 
     private double xSpeed; 
-    private boolean isSet; 
+    private boolean isSet;
+    private double getTX;
     
 
     public HubAlign(SwerveSubsystem subsystem, CommandXboxController controller, Supplier<Boolean> isOscillate) {
@@ -46,18 +47,21 @@ public class HubAlign extends Command{
         else
             tagIDs = AprilTagIDs.BLUE_HUB_APRIL_TAGS;
 
-        xSpeed = 0; 
+        xSpeed = 0;
     }
 
     @Override
     public void execute() {
 
+        getTX = LimelightHelpers.getTX("limelight");
+
         // Middle
         if(findID(tagIDs[TAGS.middle.value]) && !findID(tagIDs[TAGS.left.value]) && !findID(tagIDs[TAGS.right.value])){
-            xTarget = 0;
+            xTarget = -1.85;
+
         }
 
-        double rot = rotController.calculate(LimelightHelpers.getTX("limelight"), xTarget);
+        double rot = rotController.calculate(getTX, xTarget);
 
         if(isOscillate.get() && !isSet) { 
             xSpeed = 0.5;
@@ -65,7 +69,7 @@ public class HubAlign extends Command{
         }
         else { 
             xSpeed = -controller.getLeftX(); 
-            isSet = false; 
+            isSet = false;
         }
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-controller.getLeftY(), xSpeed, rot, swerveSubsystem.getHeading());

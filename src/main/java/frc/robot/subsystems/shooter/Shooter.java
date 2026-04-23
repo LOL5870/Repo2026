@@ -123,9 +123,9 @@ public class Shooter extends SubsystemBase {
 
     public Command startIntakeCycle(){
         return run(()->{
-            intakeFlap.set(-0.5);
-            indxr.set(-0.4);
-            groundIntake.set(-0.5);
+            intakeFlap.set(-0.75);
+            indxr.set(-0.7);
+            groundIntake.set(-0.6);
         });
     }
 
@@ -143,15 +143,15 @@ public class Shooter extends SubsystemBase {
 
     public Command startFeedShooter() {
         return run(() ->{
-            indxr.set(0.6);
-            intakeFlap.set(-0.5);
+            indxr.set(0.7);
+            intakeFlap.set(-0.75);
         });
     }
 
     public Command startFeedFuel(){
         return run(() -> {
-            indxr.set(0.6);
-            intakeFlap.set(-0.5);
+            indxr.set(0.7);
+            intakeFlap.set(-0.75);
 
         });
     }
@@ -171,24 +171,26 @@ public class Shooter extends SubsystemBase {
         shooterRightController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl); 
     }
 
-    public void unstuckFuel(){
-        indxr.set(-0.6);
-        intakeFlap.set(-0.5);
-    }
-
     public double getShooterRPM() {
         return shooterRightEncoder.getVelocity(); 
     }
 
     public void feedFuel() { 
-        indxr.set(0.6);
-        intakeFlap.set(-0.5);
+        indxr.set(0.7);
+        intakeFlap.set(-0.75);
+    }
+    
+    public void begoneFuel(double rpm){
+        indxr.set(-0.7);
+        intakeFlap.set(0.75);
+        shooterLeftController.setSetpoint(-rpm, ControlType.kMAXMotionVelocityControl);
+        shooterRightController.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl);
     }
 
     public void fromGroundFeed(){
-        indxr.set(0.6);
-        intakeFlap.set(-0.5);
-        groundIntake.set(-0.5);
+        indxr.set(0.7);
+        intakeFlap.set(-0.75);
+        groundIntake.set(-0.6);
     }
 
 
