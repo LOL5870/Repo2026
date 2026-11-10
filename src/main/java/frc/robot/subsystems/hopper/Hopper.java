@@ -15,6 +15,7 @@ public class Hopper extends SubsystemBase{
     VictorSP leftMotor;
     VictorSP rightMotor;
     private final double leftMultiplier = 1.175; 
+    
     public Hopper(){
 
         // Initalize motors   --Change this in the Constants.java file--
