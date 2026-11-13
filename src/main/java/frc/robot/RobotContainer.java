@@ -25,8 +25,6 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import swervelib.SwerveInputStream;
 import java.io.File;
-
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -106,15 +104,19 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
     // Setup Controls
-    // Driver Controller
-    driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
-    driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
-    driverXbox.b().whileTrue(shooter.spinindxr()).onFalse(shooter.stopCycles()); 
-    // driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
-    // driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    // driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
+    // -- DRIVER CONTROLLER -- 
+    // Zero Gyro when you press start button
 
+    // WHILE pressing RIGHT BUMPER align to hub, Use BUTTON B as Boolean Supplier.
+
+    // WHILE pressing LEFT BUMPER oscillate the hopper REPEATEDLY. 
+
+    // WHILE pressing B SPIN INDEXER. 
+
+
+    // -- OPERATOR XBOX --
+    // WHILE pressing LEFT BUMPER run SHOOT CYCLE from SHOOTER COMMANDS FOLDER. 
+    // EXAMPLE, DELETE THIS AFTER LOOKING THROUGH IT AND TRY WRITING IT. 
     opXbox.leftBumper().whileTrue(
       new ShootCycle(
         () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
@@ -122,29 +124,16 @@ public class RobotContainer {
         () -> opXbox.rightBumper().getAsBoolean()
         ))
         .onFalse(shooter.stopCycles());
-    opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
-    opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
-    opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
-    opXbox.povUp().whileTrue(
-      new ShooterCycleMan(
-        shooter, 
-        4800.0, 
-        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
-        () -> opXbox.b().getAsBoolean() // from ground
-        ))
-        .onFalse(shooter.stopCycles());
-    opXbox.povDown().whileTrue(
-      new ShooterCycleMan(
-        shooter, 
-        3800.0, 
-        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
-        () -> opXbox.b().getAsBoolean() // from ground
-        ))
-        .onFalse(shooter.stopCycles());
-    opXbox.x().whileTrue(new UnstuckBall(shooter, 4000)).onFalse(shooter.stopCycles());
-    // opXbox.povUp().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
-    // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
+    
+    // WHILE pressing D-PAD LEFT DETRACT HOPPER at 40% speed.
+
+    // WHILE pressing D-PAD RIGHT EXTEND HOPPER at 40% speed. 
+
+    // WHILE pressing Y start the INTAKE CYCLE. 
+
+    // pressing a should eject the fuel. 
+
+    // pressing x should get the ball unstuck. spin shooter in reverse at 4000 RPM
 
   }
 
