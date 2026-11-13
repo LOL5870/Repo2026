@@ -46,9 +46,9 @@ public class RobotContainer {
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
       () -> driverXbox.getLeftY() * -1,
       () -> driverXbox.getLeftX() * -1)
-      .withControllerRotationAxis(driverXbox::getRightX)
+      .withControllerRotationAxis(() -> driverXbox.getRightX() * 0.5)
       .deadband(0.1)
-      .scaleTranslation(.60)
+      .scaleTranslation(.20)
       .allianceRelativeControl(true);
   
   // Initialize Subsystems
@@ -108,43 +108,11 @@ public class RobotContainer {
     // Setup Controls
     // Driver Controller
     driverXbox.start().onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
-    driverXbox.rightBumper().whileTrue(new HubAlign(swerveSubsystem, driverXbox, () -> driverXbox.b().getAsBoolean()));// jiggle test
-    driverXbox.leftBumper().whileTrue(hopper.oscillateHopper().repeatedly()).onFalse(hopper.stopHopper()); 
-    driverXbox.b().whileTrue(shooter.spinindxr()).onFalse(shooter.stopCycles()); 
-    // driverXbox.b().whileTrue(hopper.extendHopperCustom()).onFalse(hopper.stopHopper());
-    // driverXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    // driverXbox.a().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel()); 
-
-    opXbox.leftBumper().whileTrue(
-      new ShootCycle(
-        () -> shooterTreeMap.get(LimelightHelpers.getTA("limelight")),
-        shooter, 
-        () -> opXbox.rightBumper().getAsBoolean()
-        ))
-        .onFalse(shooter.stopCycles());
-    opXbox.povLeft().whileTrue(hopper.hopperIn(() -> 0.4)).onFalse(hopper.stopHopper());
-    opXbox.povRight().whileTrue(hopper.hopperOut(()-> 0.4)).onFalse(hopper.stopHopper());
-    opXbox.y().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle()); 
-    opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopCycles());
-    opXbox.povUp().whileTrue(
-      new ShooterCycleMan(
-        shooter, 
-        4800.0, 
-        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
-        () -> opXbox.b().getAsBoolean() // from ground
-        ))
-        .onFalse(shooter.stopCycles());
-    opXbox.povDown().whileTrue(
-      new ShooterCycleMan(
-        shooter, 
-        3800.0, 
-        () -> opXbox.rightBumper().getAsBoolean(), // from hopper
-        () -> opXbox.b().getAsBoolean() // from ground
-        ))
-        .onFalse(shooter.stopCycles());
-    opXbox.x().whileTrue(new UnstuckBall(shooter, 4000)).onFalse(shooter.stopCycles());
-    // opXbox.povUp().whileTrue(shooter.testShooter()).onFalse(shooter.stopShooter());
-    // opXbox.b().whileTrue(shooter.startFeedFuel()).onFalse(shooter.stopFeedFuel());
+    
+// intake on left bumper, and stop when released
+    opXbox.leftBumper().whileTrue(shooter.startIntakeCycle()).onFalse(shooter.stopIntakeCycle());
+    opXbox.a().whileTrue(shooter.ejectFuel()).onFalse(shooter.stopIntakeCycle());
+    opXbox.rightBumper().whileTrue(new ShooterCycleMan(shooter,3000, () -> opXbox.y().getAsBoolean())).onFalse(shooter.stopCycles());
 
   }
 

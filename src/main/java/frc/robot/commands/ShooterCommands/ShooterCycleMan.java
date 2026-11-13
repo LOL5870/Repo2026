@@ -11,12 +11,12 @@ public class ShooterCycleMan extends Command{
     private Shooter shooter;
     private double RPM;
     private Supplier<Boolean> isFeed;
-    private Supplier<Boolean> isHopper;
+ 
     private boolean rpmReached;
 
-    public ShooterCycleMan(Shooter shooter, double rpm, Supplier<Boolean> isFeed, Supplier<Boolean> isHopper){
+    public ShooterCycleMan(Shooter shooter, double rpm, Supplier<Boolean> isFeed){
 
-        this.isHopper = isHopper;
+        
         this.isFeed = isFeed;
         this.shooter = shooter;
         this.RPM = rpm;
@@ -33,20 +33,11 @@ public class ShooterCycleMan extends Command{
 
         shooter.setRPM(RPM);
 
-        if(-shooter.getShooterRPM() > RPM - 1000 && !rpmReached) { 
-            rpmReached = true;
-            Constants.rpmReached = true;
-            
-        }
-
 
         if(isFeed.get()){
             shooter.feedFuel();
         }
 
-        else if(isHopper.get()){
-            shooter.fromGroundFeed();
-        }
 
         else{
             shooter.stopFromGround();
